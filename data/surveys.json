@@ -1,0 +1,58 @@
+[
+  {
+    "id": "GT-2026-009",
+    "parcelId": "TN-MDU-000124",
+    "surveyNumber": "S-124/3",
+    "status": "Verified",
+    "assignedOfficer": "K. Meenakshi Sundaram (RDO)",
+    "surveyDate": "2026-03-02",
+    "gpsCoords": { "latitude": 9.92482, "longitude": 78.11865, "accuracy": 0.45 },
+    "observedBoundary": "Reinforced masonry boundary wall with compound gate. All physical pegs matched geodetic coordinates.",
+    "observedLandUse": "Residential (G+1 Villa)",
+    "photoUrl": "assets/images/survey_mdu_124.jpg",
+    "notes": "Field boundary confirmed with adjoining patta holders. Road margin respected.",
+    "syncStatus": "synced"
+  },
+  {
+    "id": "GT-2026-010",
+    "parcelId": "TN-MDU-000128",
+    "surveyNumber": "S-125/2",
+    "status": "In Progress",
+    "assignedOfficer": "S. Thangaraj (Tahsildar)",
+    "surveyDate": "2026-03-21",
+    "gpsCoords": { "latitude": 9.92348, "longitude": 78.12001, "accuracy": 0.8 },
+    "observedBoundary": "Corner pillars located. Height verification in progress.",
+    "observedLandUse": "Commercial Multi-Storey Retail",
+    "photoUrl": "assets/images/survey_mdu_128.jpg",
+    "notes": "Planning permit verification ongoing with Municipal Corporation zonal office.",
+    "syncStatus": "synced"
+  },
+  {
+    "id": "GT-2026-011",
+    "parcelId": "TN-MDU-000132",
+    "surveyNumber": "S-126/3",
+    "status": "Pending",
+    "assignedOfficer": "R. Selvaraj (GIS Analyst)",
+    "surveyDate": "2026-03-23",
+    "gpsCoords": { "latitude": 9.92315, "longitude": 78.12295, "accuracy": 1.2 },
+    "observedBoundary": "Pending physical site inspection for boundary overlap with S-126/4.",
+    "observedLandUse": "Residential",
+    "photoUrl": "",
+    "notes": "Joint inspection scheduled with Revenue Inspector and municipal surveyor.",
+    "syncStatus": "synced"
+  },
+  {
+    "id": "GT-2026-012",
+    "parcelId": "TN-MDU-000133",
+    "surveyNumber": "S-127/1",
+    "status": "Submitted",
+    "assignedOfficer": "M. Senthamizhan (City Planner)",
+    "surveyDate": "2026-03-20",
+    "gpsCoords": { "latitude": 9.92190, "longitude": 78.11885, "accuracy": 0.6 },
+    "observedBoundary": "Unapproved layout stone pegs planted. Gravel roads formed.",
+    "observedLandUse": "Peri-Urban Plotted Layout (Under Regularization)",
+    "photoUrl": "assets/images/survey_mdu_133.jpg",
+    "notes": "Submitted to RDO for DTCP layout scrutiny and conversion fee assessment.",
+    "syncStatus": "synced"
+  }
+]

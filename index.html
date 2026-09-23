@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLI - Geospatial Land Intelligence Platform | SIH26013</title>
+  <meta name="description" content="Intelligent Geospatial Integration for Urban Land Governance. Automated Integration and Intelligent Harmonization of Multi-source Geospatial Data for Urban Land Record Management.">
+  
+  <!-- Typography: Inter Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet GIS Web Map Library -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Chart.js for Spatial Quality Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Platform Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+
+  <!-- Official Government Top Bar -->
+  <div class="gov-top-bar">
+    <div class="gov-emblem-text">
+      <span class="gov-tag">GOVERNMENT OF TAMIL NADU</span>
+      <span>REVENUE &amp; DISASTER MANAGEMENT DEPARTMENT • CADASTRAL SURVEY DIRECTORATE</span>
+      <span style="opacity:0.6;">|</span>
+      <span>SIH26013: Urban Land Governance</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <div style="display:flex; align-items:center; gap:0.35rem;">
+        <select id="top-language-select" class="sl-select" style="font-size:0.75rem; padding:0.15rem 0.4rem; height:24px; min-height:unset; background:#102A43; color:#D9E2EC; border-color:#334E68;" onchange="window.SL_STORAGE.setLanguage(this.value); window.SL_APP.applyLanguage(this.value); window.SL_APP.showToast('Language changed to ' + this.value.toUpperCase(), 'info');">
+          <option value="en">English (Official)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+        </select>
+      </div>
+      <div id="gov-live-clock" style="font-family:var(--sl-font-mono); font-size:0.75rem; color:#D9E2EC;"></div>
+      <span class="gov-tag" style="background:#E65100; color:#fff;">DEMO PROTOTYPE</span>
+    </div>
+  </div>
+
+  <!-- Simulated Offline Alert Strip -->
+  <div id="offline-mode-banner" class="offline-status-bar">
+    <span>&#9888; <strong>Offline Field Mode Active:</strong> Disconnected from central server. Cached survey records: <strong id="offline-queue-count">0</strong></span>
+    <button id="btn-offline-sync-now" class="sl-btn sl-btn-secondary sl-btn-sm" style="padding:0.2rem 0.6rem; min-height:26px;">SYNC NOW</button>
+  </div>
+
+  <!-- Main App Shell -->
+  <div id="app">
+
+    <!-- ====================================================================
+         SCREEN 1: OFFICIAL GOVERNMENT SPLASH SCREEN
+         ==================================================================== -->
+    <div id="screen-splash" class="sl-screen active">
+      <div class="splash-box">
+        <img src="assets/logo/sl-logo.svg" alt="SLI Logo" class="splash-logo">
+        <h1 class="splash-title">SLI</h1>
+        <div class="splash-subtitle">Geospatial Land Intelligence Platform</div>
+        <div class="splash-tagline">SIH26013 • Automated Integration and Intelligent Harmonization of Multi-source Geospatial Data for Urban Land Record Management</div>
+        
+        <div class="splash-bar">
+          <div class="splash-bar-fill"></div>
+        </div>
+        <div style="display:flex; gap:0.75rem; width:100%;">
+          <button class="sl-btn sl-btn-primary" style="width:100%;" onclick="window.SL_NAV.navigateTo('welcome')">
+            Enter Government Platform &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 2: WELCOME / LANDING WITH CLEAR TWO-DOOR ACCESS
+         ==================================================================== -->
+    <div id="screen-welcome" class="sl-screen">
+      <header class="portal-entry-header">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:38px;">
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <button class="sl-btn sl-btn-outline sl-btn-sm" onclick="window.SL_NAV.navigateTo('user-login')">Citizen Sign In</button>
+          <button class="sl-btn sl-btn-primary sl-btn-sm" onclick="window.SL_NAV.navigateTo('officer-login')">Officer Portal &rarr;</button>
+        </div>
+      </header>
+      <main class="portal-entry-hero">
+        <div style="display:inline-block; background:#E1F5FE; color:#0277BD; border:1px solid #B3E5FC; padding:0.25rem 0.75rem; border-radius:4px; font-size:0.75rem; font-weight:700; margin-bottom:1rem; letter-spacing:0.04em;">
+          SMART INDIA HACKATHON PROBLEM STATEMENT SIH26013
+        </div>
+        <h1 class="portal-entry-title">Urban Land Information &amp; Cadastral GIS Platform</h1>
+        <p class="portal-entry-desc">
+          Unified administrative system for automated integration, topology validation, and intelligent harmonization across Revenue Cadastral FMBs, High-Resolution Drone Orthomosaics (ORI), Municipal GIS, and Survey of India GNSS/CORS Geodetic Networks.
+        </p>
+        <!-- Two Clear Portal Doors -->
+        <div class="portal-doors-grid">
+          <!-- Citizen User Portal Door -->
+          <div class="portal-door-card user-card">
+            <div class="door-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sl-secondary)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>USER PORTAL</span>
+            </div>
+            <p class="door-desc">
+              Public &amp; Land Owner Access. Inspect your verified property extents, view certified Digital Patta (ROR) extracts, submit boundary correction requests, and monitor administrative review milestones.
+            </p>
+            <ul class="door-features-list">
+              <li>Certified Digital Patta (ROR) Land Records</li>
+              <li>Interactive Public Land Boundary Map</li>
+              <li>Discrepancy &amp; Boundary Correction Requests</li>
+              <li>Real-Time Application Status Timeline</li>
+            </ul>
+            <button class="sl-btn sl-btn-outline" style="width:100%; border-color:var(--sl-secondary); color:var(--sl-secondary);" onclick="window.SL_NAV.navigateTo('user-login')">
+              ENTER USER PORTAL &rarr;
+            </button>
+          </div>
+
+          <!-- Government Officer Portal Door -->
+          <div class="portal-door-card officer-card">
+            <div class="door-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sl-primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>OFFICER PORTAL</span>
+            </div>
+            <p class="door-desc">
+              Authorized Government Cadastral &amp; GIS Workspace. Restricted access for Revenue, Survey, Municipal GIS, and Urban Planning officers. Full GIS workspace, pending actions work queue, and official record governance.
+            </p>
+            <ul class="door-features-list">
+              <li>90%+ Viewport GIS Workspace &amp; Layers</li>
+              <li>Priority Pending Actions Work Queue</li>
+              <li>Official Record Editing &amp; Audit Trail</li>
+              <li>Conflict Resolution &amp; Field Ground-Truthing</li>
+            </ul>
+            <button class="sl-btn sl-btn-primary" style="width:100%;" onclick="window.SL_NAV.navigateTo('officer-login')">
+              ENTER OFFICER PORTAL &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Architecture Pillars -->
+        <div class="welcome-grid" style="margin-top:3rem;">
+          <div class="feature-box">
+            <div class="feature-box-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <h3>Multi-Source Harmonization</h3>
+            <p>Automated coordinate transformation, CRS detection, and spatial matching across revenue FMBs, municipal parcels, and drone orthomosaics.</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-box-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3>Conflict Resolution Center</h3>
+            <p>Discrepancy detection between disparate area extents, boundary overlaps, and unapproved buildings with Human-in-the-Loop governance.</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-box-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3>Temporal Change Detection</h3>
+            <p>Interactive Before &amp; After split-screen comparison slider analyzing 2024 cadastral baseline against 2026 drone imagery.</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-box-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3>Field Ground-Truthing</h3>
+            <p>Mobile tablet survey module with geodetic GPS coordinates fix, live camera verification, CORS calibration, and offline caching.</p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 3: PORTAL SELECTION (DIRECT ROUTE)
+         ==================================================================== -->
+    <div id="screen-portal-select" class="sl-screen">
+      <header class="portal-entry-header">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:34px; cursor:pointer;" onclick="window.SL_NAV.navigateTo('welcome')">
+          <strong style="color:var(--sl-primary-dark); font-size:1rem;"></strong>
+        </div>
+        <button class="sl-btn sl-btn-outline sl-btn-sm" onclick="window.SL_NAV.navigateTo('welcome')">&larr; Back to Home</button>
+      </header>
+
+      <div class="portal-entry-hero">
+        <h2 style="margin-bottom:0.5rem; color:var(--sl-primary-dark);">Choose Your Access Authorization</h2>
+        <p style="font-size:0.9rem; color:var(--sl-text-secondary); margin-bottom:2rem;">Select the appropriate portal to proceed into the SLI Geospatial Land Intelligence Platform.</p>
+
+        <div class="portal-doors-grid">
+          <!-- User Door -->
+          <div class="portal-door-card user-card">
+            <div class="door-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sl-secondary)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>USER PORTAL</span>
+            </div>
+            <p class="door-desc">Public Land Owner &amp; Citizen Access for viewing certified Patta records, boundaries, and filing correction applications.</p>
+            <button class="sl-btn sl-btn-outline" style="width:100%; border-color:var(--sl-secondary); color:var(--sl-secondary);" onclick="window.SL_NAV.navigateTo('user-login')">
+              CONTINUE AS CITIZEN USER &rarr;
+            </button>
+          </div>
+
+          <!-- Officer Door -->
+          <div class="portal-door-card officer-card">
+            <div class="door-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sl-primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>OFFICER PORTAL</span>
+            </div>
+            <p class="door-desc">Restricted Government Administrative Network for Revenue, Municipal GIS, Surveyors, and Town Planning Officers.</p>
+            <button class="sl-btn sl-btn-primary" style="width:100%;" onclick="window.SL_NAV.navigateTo('officer-login')">
+              CONTINUE AS GOVERNMENT OFFICER &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 4: CITIZEN USER LOGIN
+         ==================================================================== -->
+    <div id="screen-user-login" class="sl-screen" style="align-items:center; justify-content:center; padding:2rem 1rem; position:relative;">
+      <button class="sl-btn sl-btn-outline sl-btn-sm" style="position:absolute; top:1.5rem; left:1.5rem;" onclick="window.SL_NAV.goBack()">&larr; Back</button>
+      <div class="sl-card" style="max-width:440px; width:100%; padding:2rem; box-shadow:var(--sl-shadow-xl);">
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:44px; margin-bottom:0.5rem;">
+          <h3>Citizen Sign In</h3>
+          <p style="font-size:0.85rem;">Access your registered land parcels and requests</p>
+          <div style="margin-top:0.5rem;"><span class="sih-badge">Prototype Demo Credentials Available</span></div>
+        </div>
+
+        <form id="form-user-login">
+          <div class="sl-form-group">
+            <label class="sl-label" for="user-login-identifier">Email / Mobile Number</label>
+            <input type="text" id="user-login-identifier" class="sl-input" placeholder="user@sl.demo or 9840212345" required>
+          </div>
+          <div class="sl-form-group">
+            <label class="sl-label" for="user-login-password">Password</label>
+            <input type="password" id="user-login-password" class="sl-input" placeholder="user123" required>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; font-size:0.825rem;">
+            <label class="sl-checkbox-label">
+              <input type="checkbox" checked> Remember Me
+            </label>
+            <a href="javascript:void(0)" onclick="window.SL_APP.showToast('Demo reset: password is user123', 'info')">Forgot Password?</a>
+          </div>
+          <button type="submit" class="sl-btn sl-btn-primary" style="width:100%; margin-bottom:0.75rem;">Sign In</button>
+          <button type="button" id="btn-prefill-user" class="sl-btn sl-btn-outline sl-btn-sm" style="width:100%; margin-bottom:1rem;">
+            Fill Demo Citizen Credentials (user@sl.demo)
+          </button>
+        </form>
+
+        <div style="text-align:center; font-size:0.85rem; border-top:1px solid var(--sl-border-light); padding-top:1rem;">
+          Don't have an account? <a href="javascript:void(0)" onclick="window.SL_NAV.navigateTo('user-register')">Create Account</a>
+          <br><br>
+          <a href="javascript:void(0)" onclick="window.SL_NAV.navigateTo('portal-select')">&larr; Switch Portal</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 5: CITIZEN REGISTRATION
+         ==================================================================== -->
+    <div id="screen-user-register" class="sl-screen" style="align-items:center; justify-content:center; padding:2rem 1rem; position:relative;">
+      <button class="sl-btn sl-btn-outline sl-btn-sm" style="position:absolute; top:1.5rem; left:1.5rem;" onclick="window.SL_NAV.goBack()">&larr; Back</button>
+      <div class="sl-card" style="max-width:580px; width:100%; padding:2rem; box-shadow:var(--sl-shadow-xl);">
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:40px; margin-bottom:0.5rem;">
+          <h3>Citizen Account Registration</h3>
+          <p style="font-size:0.85rem;">Register to access harmonized GIS land records</p>
+        </div>
+
+        <form id="form-user-register">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-name">Full Name</label>
+              <input type="text" id="reg-name" class="sl-input" placeholder="e.g. R. Sundararaman" required>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-mobile">Mobile Number</label>
+              <input type="tel" id="reg-mobile" class="sl-input" placeholder="+91 98402 12345" required>
+            </div>
+          </div>
+          <div class="sl-form-group">
+            <label class="sl-label" for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" class="sl-input" placeholder="citizen@demo.org" required>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-password">Password</label>
+              <input type="password" id="reg-password" class="sl-input" placeholder="Min 6 characters" required>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-confirm-password">Confirm Password</label>
+              <input type="password" id="reg-confirm-password" class="sl-input" placeholder="Repeat password" required>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem;">
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-district">District</label>
+              <select id="reg-district" class="sl-select">
+                <option value="Madurai">Madurai</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Coimbatore">Coimbatore</option>
+              </select>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-taluk">Taluk</label>
+              <select id="reg-taluk" class="sl-select">
+                <option value="Madurai South">Madurai South</option>
+                <option value="Madurai North">Madurai North</option>
+                <option value="Thiruparankundram">Thiruparankundram</option>
+              </select>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="reg-village">Village / Ward</label>
+              <select id="reg-village" class="sl-select">
+                <option value="Ward 12 (Anuppanadi)">Ward 12 (Anuppanadi)</option>
+                <option value="Ward 13 (Teppakulam)">Ward 13 (Teppakulam)</option>
+                <option value="Ward 14 (Villapuram)">Ward 14 (Villapuram)</option>
+              </select>
+            </div>
+          </div>
+          <div class="sl-form-group">
+            <label class="sl-checkbox-label">
+              <input type="checkbox" required checked> I agree to the Land Governance Information Terms &amp; Privacy Policy
+            </label>
+          </div>
+          <button type="submit" class="sl-btn sl-btn-primary" style="width:100%; margin-bottom:0.75rem;">CREATE ACCOUNT</button>
+        </form>
+
+        <div style="text-align:center; font-size:0.85rem; border-top:1px solid var(--sl-border-light); padding-top:1rem;">
+          Already have an account? <a href="javascript:void(0)" onclick="window.SL_NAV.navigateTo('user-login')">Sign In</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 6: GOVERNMENT OFFICER LOGIN
+         ==================================================================== -->
+    <div id="screen-officer-login" class="sl-screen" style="align-items:center; justify-content:center; padding:2rem 1rem; position:relative;">
+      <button class="sl-btn sl-btn-outline sl-btn-sm" style="position:absolute; top:1.5rem; left:1.5rem;" onclick="window.SL_NAV.goBack()">&larr; Back</button>
+      <div class="sl-card" style="max-width:460px; width:100%; padding:2.25rem; box-shadow:var(--sl-shadow-xl); border-top:4px solid var(--sl-blue-700);">
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:44px; margin-bottom:0.5rem;">
+          <h3>Officer Portal</h3>
+          <p style="font-size:0.825rem; color:var(--sl-text-secondary);">Authorized Access for Government Land &amp; GIS Officers</p>
+          <div style="margin-top:0.5rem;"><span class="sih-badge" style="background:#fef3c7; color:#b45309; border-color:#fde68a;">Restricted Official Network</span></div>
+        </div>
+
+        <form id="form-officer-login">
+          <div class="sl-form-group">
+            <label class="sl-label" for="officer-id">Official Government ID</label>
+            <input type="email" id="officer-id" class="sl-input" placeholder="officer@sl.gov.in" required>
+          </div>
+          <div class="sl-form-group">
+            <label class="sl-label" for="officer-password">Official Password</label>
+            <input type="password" id="officer-password" class="sl-input" placeholder="SL@1234" required>
+          </div>
+          <div class="sl-form-group">
+            <label class="sl-label" for="officer-department">Authorized Department</label>
+            <select id="officer-department" class="sl-select" required>
+              <option value="Revenue Department">Revenue Department</option>
+              <option value="Department of Land Resources">Department of Land Resources</option>
+              <option value="Municipal Administration">Municipal Administration</option>
+              <option value="Survey Department">Survey Department</option>
+              <option value="Urban Planning">Urban Planning</option>
+              <option value="GIS Administration">GIS Administration</option>
+            </select>
+          </div>
+          <button type="submit" class="sl-btn sl-btn-primary" style="width:100%; margin-bottom:0.75rem;">
+            SECURE SIGN IN (2FA)
+          </button>
+          <button type="button" id="btn-prefill-officer" class="sl-btn sl-btn-outline sl-btn-sm" style="width:100%; margin-bottom:1rem;">
+            Fill Demo Officer Credentials (officer@sl.gov.in / SL@1234)
+          </button>
+        </form>
+
+        <div style="text-align:center; font-size:0.825rem; border-top:1px solid var(--sl-border-light); padding-top:1rem; color:var(--sl-text-muted);">
+          All administrative actions logged with geodetic timestamp &amp; IP audit trace.
+          <br><br>
+          <a href="javascript:void(0)" onclick="window.SL_NAV.navigateTo('portal-select')">&larr; Switch Portal</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 7: CITIZEN USER DASHBOARD (MOBILE-FIRST ACCESS)
+         ==================================================================== -->
+    <div id="screen-user-dashboard" class="sl-screen">
+      <!-- User Mobile / Desktop Header -->
+      <header class="app-header" style="position:sticky; top:0;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:34px;">
+        </div>
+        <div class="header-right">
+          <span style="font-size:0.825rem; font-weight:600; color:var(--sl-navy-900);">
+            Good Day, <span id="user-dashboard-greeting-name" class="user-display-name">Citizen</span>
+          </span>
+          <button class="sl-btn sl-btn-outline sl-btn-sm btn-logout">Sign Out</button>
+        </div>
+      </header>
+
+      <header class="mobile-header">
+        <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:30px; max-width:145px;">
+        <button class="sl-btn sl-btn-outline sl-btn-sm btn-logout">Sign Out</button>
+      </header>
+
+      <div style="max-width:1100px; margin:0 auto; padding:1rem 1rem 0; display:flex; justify-content:space-between; align-items:center;">
+        <button class="sl-btn sl-btn-outline sl-btn-sm" onclick="window.SL_NAV.goBackFromUserTab()">&larr; Back</button>
+        <div style="font-size:0.75rem; color:var(--sl-text-secondary); text-transform:uppercase; letter-spacing:0.06em;">Citizen Portal</div>
+      </div>
+
+      <!-- User Page Body -->
+      <div class="page-container" style="max-width:1100px; margin:0 auto; width:100%;">
+
+        <!-- Tab 1: Home View -->
+        <div id="user-view-home" class="user-tab-content">
+          <div style="margin-bottom:1.5rem;">
+            <h2>Citizen Land Dashboard</h2>
+            <p>Access your verified parcel records, submit boundary corrections, and track municipal updates.</p>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card kpi-success">
+              <div class="kpi-header"><span class="kpi-label">My Properties</span></div>
+              <div class="kpi-value" id="user-stat-properties">1</div>
+              <div class="kpi-sub">Harmonized Cadastral Plot</div>
+            </div>
+            <div class="kpi-card kpi-warning">
+              <div class="kpi-header"><span class="kpi-label">Pending Requests</span></div>
+              <div class="kpi-value" id="user-stat-pending">1</div>
+              <div class="kpi-sub">Record Correction In Progress</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header"><span class="kpi-label">Verified Records</span></div>
+              <div class="kpi-value" id="user-stat-verified">1</div>
+              <div class="kpi-sub">Official Officer Verified</div>
+            </div>
+          </div>
+
+          <!-- Main Citizen Action Cards -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-bottom:2rem;">
+            <div class="sl-card citizen-quick-action" data-action-tab="map" style="padding:1.25rem; cursor:pointer; text-align:center; transition:all 0.2s;">
+              <h4 style="margin-bottom:0.35rem; color:var(--sl-blue-700);">Search Land Map</h4>
+              <p style="font-size:0.8rem;">Explore interactive GIS boundaries, roads &amp; survey pegs</p>
+            </div>
+            <div class="sl-card citizen-quick-action" data-action-tab="myland" style="padding:1.25rem; cursor:pointer; text-align:center; transition:all 0.2s;">
+              <h4 style="margin-bottom:0.35rem; color:var(--sl-emerald-700);">My Properties</h4>
+              <p style="font-size:0.8rem;">View certified patta, survey extent &amp; digital tax record</p>
+            </div>
+            <div class="sl-card citizen-quick-action" data-action-tab="requests" style="padding:1.25rem; cursor:pointer; text-align:center; transition:all 0.2s;">
+              <h4 style="margin-bottom:0.35rem; color:var(--sl-navy-900);">Submit Request</h4>
+              <p style="font-size:0.8rem;">Apply for boundary verification or record correction</p>
+            </div>
+            <div class="sl-card citizen-quick-action" data-action-tab="requests" style="padding:1.25rem; cursor:pointer; text-align:center; transition:all 0.2s;">
+              <h4 style="margin-bottom:0.35rem; color:var(--sl-amber-700);">Track Requests</h4>
+              <p style="font-size:0.8rem;">Monitor real-time review &amp; field verification milestones</p>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="sl-card">
+            <div class="sl-card-header"><h3>Recent Land Record Activity</h3></div>
+            <div class="sl-card-body" style="padding:0;">
+              <div style="padding:1rem; border-bottom:1px solid var(--sl-border-light); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <strong>Parcel TN-MDU-000124 Certified</strong>
+                  <div style="font-size:0.775rem; color:var(--sl-text-secondary);">Sub-Divisional Magistrate approved GNSS CORS integrated boundary extent (1,245 sq.m).</div>
+                </div>
+                <span class="sl-badge sl-badge-verified">Completed</span>
+              </div>
+              <div style="padding:1rem; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <strong>Correction Request REQ-2026-0042</strong>
+                  <div style="font-size:0.775rem; color:var(--sl-text-secondary);">Municipal tax record updated from 1,175 sq.m to 1,245 sq.m.</div>
+                </div>
+                <span class="sl-badge sl-badge-info">Approved</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Citizen Interactive Land Map -->
+        <div id="user-view-map" class="user-tab-content" style="display:none;">
+          <div style="margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h2>Interactive Urban Land Map</h2>
+              <p>Click any parcel boundary to inspect survey details, registered extent, and confidence scores.</p>
+            </div>
+          </div>
+          <div class="sl-card" style="height:540px; position:relative; overflow:hidden;">
+            <div id="user-map" style="width:100%; height:100%;"></div>
+          </div>
+        </div>
+
+        <!-- Tab 3: My Land Properties -->
+        <div id="user-view-myland" class="user-tab-content" style="display:none;">
+          <div style="margin-bottom:1.5rem;">
+            <h2>My Registered Property</h2>
+            <p>Harmonized land record compiled from Cadastral FMB, Municipal GIS, Drone ORI, and GNSS CORS benchmark.</p>
+          </div>
+          <div id="user-properties-container"></div>
+        </div>
+
+        <!-- Tab 4: Requests & Real-time Tracking -->
+        <div id="user-view-requests" class="user-tab-content" style="display:none;">
+          <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h2>Citizen Requests &amp; Real-Time Tracking</h2>
+              <p>Submit applications for record correction or boundary survey, and watch progress updates.</p>
+            </div>
+            <button id="btn-open-new-request" class="sl-btn sl-btn-primary">
+              + NEW REQUEST
+            </button>
+          </div>
+          <div id="user-requests-container"></div>
+        </div>
+
+        <!-- Tab 5: Citizen Profile -->
+        <div id="user-view-profile" class="user-tab-content" style="display:none;">
+          <div class="sl-card" style="max-width:680px; margin:0 auto; padding:2rem;">
+            <h2 style="margin-bottom:1.5rem;">Citizen Profile &amp; Account Settings</h2>
+            <div class="intel-grid-2" style="margin-bottom:1.5rem;">
+              <div class="intel-data-item">
+                <span class="label">Full Name</span>
+                <span class="value" id="profile-name">R. Sundararaman</span>
+              </div>
+              <div class="intel-data-item">
+                <span class="label">Registered Mobile</span>
+                <span class="value" id="profile-mobile">+91 98402 12345</span>
+              </div>
+              <div class="intel-data-item">
+                <span class="label">Email Address</span>
+                <span class="value" id="profile-email">user@sl.demo</span>
+              </div>
+              <div class="intel-data-item">
+                <span class="label">Primary District</span>
+                <span class="value" id="profile-district">Madurai</span>
+              </div>
+              <div class="intel-data-item">
+                <span class="label">Taluk</span>
+                <span class="value" id="profile-taluk">Madurai South</span>
+              </div>
+              <div class="intel-data-item">
+                <span class="label">Village / Ward</span>
+                <span class="value" id="profile-village">Ward 12 (Anuppanadi)</span>
+              </div>
+            </div>
+            <div style="display:flex; gap:0.75rem; border-top:1px solid var(--sl-border-light); padding-top:1.5rem;">
+              <button class="sl-btn sl-btn-primary btn-logout">Sign Out</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Citizen Mobile Bottom Navigation -->
+      <nav class="mobile-bottom-nav user-nav">
+        <a class="mobile-nav-item active" data-tab="home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+        <a class="mobile-nav-item" data-tab="map">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          <span>Map</span>
+        </a>
+        <a class="mobile-nav-item" data-tab="myland">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <span>My Land</span>
+        </a>
+        <a class="mobile-nav-item" data-tab="requests">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Requests</span>
+        </a>
+        <a class="mobile-nav-item" data-tab="profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- ====================================================================
+         SCREEN 8: GOVERNMENT OFFICER COMMAND CENTER
+         ==================================================================== -->
+    <div id="screen-officer-command" class="sl-screen">
+      <div class="app-shell">
+
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="desktop-sidebar">
+          <div class="sidebar-brand">
+            <img src="assets/logo/sl-logo.svg" alt="SLI Logo" class="sidebar-brand-img" style="height:38px;">
+          </div>
+
+          <nav class="sidebar-nav">
+            <div class="sidebar-section-title">Core Operations</div>
+            <a class="sidebar-item active" data-sec="dashboard">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span data-i18n="dashboard">Dashboard</span>
+            </a>
+            <a class="sidebar-item" data-sec="gis">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+              <span data-i18n="gisWorkspace">GIS Workspace</span>
+            </a>
+            <a class="sidebar-item" data-sec="datasets">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              <span data-i18n="datasets">Datasets</span>
+              <span class="sidebar-item-badge">10</span>
+            </a>
+            <a class="sidebar-item" data-sec="harmonization">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span data-i18n="harmonization">Harmonization</span>
+            </a>
+            <a class="sidebar-item" data-sec="parcels">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span data-i18n="parcels">Land Parcels</span>
+            </a>
+
+            <div class="sidebar-section-title">Governance &amp; Audit</div>
+            <a class="sidebar-item" data-sec="reports">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span data-i18n="reports">Reports</span>
+            </a>
+            <a class="sidebar-item" data-sec="settings">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span data-i18n="settings">Settings</span>
+            </a>
+          </nav>
+
+          <!-- Sidebar Officer Profile Footer -->
+          <div class="sidebar-footer">
+            <div class="sidebar-user-info">
+              <div class="user-avatar">SDM</div>
+              <div>
+                <div class="user-meta-name user-display-name">K. Meenakshi Sundaram</div>
+                <div class="user-meta-role user-display-role">SDM / RDO Madurai</div>
+              </div>
+            </div>
+            <button class="sl-btn sl-btn-icon-only sl-btn-outline btn-logout" title="Sign Out">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+
+          <header class="mobile-header">
+            <img src="assets/logo/sl-logo-dark.svg" alt="SLI Logo" style="height:30px; max-width:145px;">
+            <button id="btn-mobile-ai-assistant" class="sl-btn sl-btn-outline sl-btn-sm" onclick="document.getElementById('officer-ai-assistant-panel').style.right='0';">GIS Assistant</button>
+          </header>
+
+          <!-- Desktop Top Header -->
+          <header class="app-header">
+            <div class="header-left">
+              <div class="sl-search-container">
+                <span class="sl-search-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </span>
+                <input type="text" id="global-search-input" class="sl-search-input" placeholder="Search Parcel ID, Survey Number, Owner or Ward...">
+                <div id="global-search-results" style="display:none; position:absolute; top:46px; left:0; right:0; background:#fff; border:1px solid var(--sl-border-medium); border-radius:var(--sl-radius-md); box-shadow:var(--sl-shadow-lg); z-index:900;"></div>
+              </div>
+            </div>
+
+            <div class="header-right">
+              <div id="officer-live-clock" style="font-family:var(--sl-font-mono); font-size:0.775rem; color:var(--sl-text-secondary); font-weight:600; padding:0 0.5rem;"></div>
+
+              <button id="btn-toggle-offline" class="header-btn">
+                Simulate Offline Mode
+              </button>
+
+              <button id="btn-open-ai-assistant" class="header-btn" style="background:var(--sl-info-bg); color:var(--sl-primary); border-color:var(--sl-info-border);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                GIS Assistant
+              </button>
+
+              <!-- Notifications Bell Button -->
+              <div style="position:relative;">
+                <button id="btn-header-notifications" class="notif-bell-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  <span class="notif-badge-count">2</span>
+                </button>
+
+                <!-- Notifications Dropdown -->
+                <div id="notifications-dropdown" style="display:none; position:absolute; right:0; top:48px; width:340px; background:#fff; border:1px solid var(--sl-border-medium); border-radius:var(--sl-radius-lg); box-shadow:var(--sl-shadow-xl); z-index:1000;">
+                  <div style="padding:0.75rem 1rem; border-bottom:1px solid var(--sl-border-light); display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="font-size:0.9rem;">Notifications</strong>
+                    <button id="btn-mark-all-read" style="background:none; border:none; color:var(--sl-primary); font-size:0.75rem; cursor:pointer;">Mark all read</button>
+                  </div>
+                  <div id="notifications-list-container" style="max-height:360px; overflow-y:auto;"></div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <!-- ====================================================================
+               SUB-VIEW 1: COMMAND CENTER DASHBOARD
+               ==================================================================== -->
+          <div id="officer-sec-dashboard" class="officer-section-view page-container">
+            <!-- Dashboard Page Header -->
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <h2 style="font-size:1.55rem; color:var(--sl-primary-dark); margin-bottom:0.25rem;">GIS Command Center</h2>
+                <p style="font-size:0.875rem; color:var(--sl-text-secondary);">Automated Integration &amp; Intelligent Harmonization of Multi-source Geospatial Data (SIH26013)</p>
+              </div>
+              <div>
+                <button class="sl-btn sl-btn-primary" onclick="window.SL_NAV.switchOfficerSection('gis')">
+                  Open GIS Workspace &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- Statistics Grid (6 Cards) -->
+            <div class="stats-grid">
+              <!-- Card 1: Total Parcels -->
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Total Parcels</span>
+                  <div class="stat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                </div>
+                <div class="stat-value">12,842</div>
+                <div class="stat-description">Ward 12 &amp; 13 Sector</div>
+              </div>
+
+              <!-- Card 2: Integrated Datasets -->
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Integrated Datasets</span>
+                  <div class="stat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg>
+                  </div>
+                </div>
+                <div class="stat-value">38</div>
+                <div class="stat-description">7 Multi-Source Types</div>
+              </div>
+
+              <!-- Card 3: Pending Reviews -->
+              <div class="stat-card stat-warning">
+                <div class="stat-header">
+                  <span class="stat-label">Pending Reviews</span>
+                  <div class="stat-icon" style="background:var(--sl-warning-bg); color:#A0680A;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                </div>
+                <div class="stat-value">126</div>
+                <div class="stat-description">Officer Action Required</div>
+              </div>
+
+              <!-- Card 4: Spatial Conflicts -->
+              <div class="stat-card stat-danger">
+                <div class="stat-header">
+                  <span class="stat-label">Spatial Conflicts</span>
+                  <div class="stat-icon" style="background:var(--sl-danger-bg); color:var(--sl-danger);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  </div>
+                </div>
+                <div class="stat-value">43</div>
+                <div class="stat-description">Cross-Source Area/Overlap</div>
+              </div>
+
+              <!-- Card 5: Changes Detected -->
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Changes Detected</span>
+                  <div class="stat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  </div>
+                </div>
+                <div class="stat-value">217</div>
+                <div class="stat-description">2024–2026 Temporal Analysis</div>
+              </div>
+
+              <!-- Card 6: Verified Parcels -->
+              <div class="stat-card stat-success">
+                <div class="stat-header">
+                  <span class="stat-label">Verified Parcels</span>
+                  <div class="stat-icon" style="background:var(--sl-success-bg); color:var(--sl-success);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  </div>
+                </div>
+                <div class="stat-value">9,438</div>
+                <div class="stat-description">73.5% Overall Certified</div>
+              </div>
+            </div>
+
+            <!-- Data Quality & Harmonization Progress Strip -->
+            <div class="sl-card" style="margin-bottom:1.5rem; padding:1.25rem 1.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+                <div>
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--sl-text-muted); text-transform:uppercase; letter-spacing:0.04em;">Harmonization Health</div>
+                  <h3 style="color:var(--sl-primary-dark); font-size:1.15rem; margin-top:2px;">Geospatial Data Quality Index</h3>
+                </div>
+                <div style="display:flex; align-items:baseline; gap:0.5rem;">
+                  <span style="font-size:1.85rem; font-weight:800; font-family:var(--sl-font-mono); color:var(--sl-success);">91.4%</span>
+                  <span style="font-size:0.8rem; color:var(--sl-text-secondary); font-weight:600;">Overall Reliability</span>
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.25rem;">
+                <!-- Indicator 1 -->
+                <div class="quality-progress-item">
+                  <div class="quality-progress-header">
+                    <span class="quality-progress-label">Source Consistency</span>
+                    <span class="quality-progress-pct">93%</span>
+                  </div>
+                  <div class="sl-progress-bar">
+                    <div class="sl-progress-fill fill-success" style="width:93%;"></div>
+                  </div>
+                </div>
+
+                <!-- Indicator 2 -->
+                <div class="quality-progress-item">
+                  <div class="quality-progress-header">
+                    <span class="quality-progress-label">Geometry Validation</span>
+                    <span class="quality-progress-pct">98%</span>
+                  </div>
+                  <div class="sl-progress-bar">
+                    <div class="sl-progress-fill fill-success" style="width:98%;"></div>
+                  </div>
+                </div>
+
+                <!-- Indicator 3 -->
+                <div class="quality-progress-item">
+                  <div class="quality-progress-header">
+                    <span class="quality-progress-label">Attribute Matching</span>
+                    <span class="quality-progress-pct">92%</span>
+                  </div>
+                  <div class="sl-progress-bar">
+                    <div class="sl-progress-fill fill-success" style="width:92%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts Row (Quality Radar & Temporal Bar) -->
+            <div class="chart-grid">
+              <!-- Radar Chart Card -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3>Geospatial Data Quality Index (Radar)</h3>
+                  <p>Multi-dimensional validation across spatial accuracy, attributes, geometry, and CORS GNSS correlation</p>
+                </div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chart-data-quality"></canvas>
+                </div>
+              </div>
+
+              <!-- Temporal Changes Chart Card -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3>Temporal Change Detection Distribution</h3>
+                  <p>Historical comparison of newly detected structures and boundary shifts from 2024 to 2026</p>
+                </div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chart-changes-distribution"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- PENDING ACTIONS WORK QUEUE (The Heart of Officer Dashboard) -->
+            <div class="sl-card pending-actions-section">
+              <div class="sl-card-header">
+                <div>
+                  <h3 style="color:var(--sl-primary-dark); letter-spacing:-0.01em;">PENDING ACTIONS WORK QUEUE</h3>
+                  <div style="font-size:0.8rem; color:var(--sl-text-secondary); margin-top:2px;">High-priority administrative tasks requiring authorized officer determination and statutory sign-off.</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span class="sl-badge sl-badge-danger">7 Action Items</span>
+                  <button class="sl-btn sl-btn-outline sl-btn-sm" onclick="window.SL_NAV.switchOfficerSection('conflicts')">
+                    View All Conflicts &rarr;
+                  </button>
+                </div>
+              </div>
+              <div class="sl-card-body" style="padding:0;">
+                <div class="sl-table-container" style="border:none;">
+                  <table class="sl-table">
+                    <thead>
+                      <tr>
+                        <th style="width:110px;">Priority</th>
+                        <th style="width:140px;">Parcel Ref</th>
+                        <th>Identified Administrative Action / Discrepancy</th>
+                        <th style="width:110px;">Detection</th>
+                        <th style="width:120px;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pending-actions-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Bottom Grid: Recent Activity & Data Sources -->
+            <div class="dashboard-bottom-grid">
+              <!-- Recent Activity Panel -->
+              <div class="sl-card">
+                <div class="sl-card-header">
+                  <h3>Recent Administrative Activity</h3>
+                  <span class="sl-badge sl-badge-neutral">Live Feed</span>
+                </div>
+                <div class="sl-card-body" style="padding:1rem 1.25rem;">
+                  <div class="activity-timeline">
+                    <div class="activity-item">
+                      <span class="activity-time">14:20</span>
+                      <div class="activity-node"></div>
+                      <div class="activity-content">
+                        <div class="activity-title">Dataset "Municipal GIS 2026" Validated</div>
+                        <div class="activity-desc">8,421 property tax polygons harmonized with cadastral vectors.</div>
+                      </div>
+                    </div>
+                    <div class="activity-item">
+                      <span class="activity-time">13:55</span>
+                      <div class="activity-node"></div>
+                      <div class="activity-content">
+                        <div class="activity-title">Parcel TN-VIR-01284 Record Updated</div>
+                        <div class="activity-desc">Sub-Divisional Magistrate signed off CORS RTK boundary fix.</div>
+                      </div>
+                    </div>
+                    <div class="activity-item">
+                      <span class="activity-time">13:42</span>
+                      <div class="activity-node"></div>
+                      <div class="activity-content">
+                        <div class="activity-title">Ground Truth Survey GT-2026-009 Submitted</div>
+                        <div class="activity-desc">Field surveyor verified compound wall corner coordinates.</div>
+                      </div>
+                    </div>
+                    <div class="activity-item">
+                      <span class="activity-time">12:18</span>
+                      <div class="activity-node"></div>
+                      <div class="activity-content">
+                        <div class="activity-title">Spatial Conflict CONF-2026-003 Resolved</div>
+                        <div class="activity-desc">Drone ORI perimeter accepted over legacy digitized sketch.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Data Sources Summary Panel -->
+              <div class="sl-card">
+                <div class="sl-card-header">
+                  <h3>Integrated Data Sources</h3>
+                  <span class="sl-badge sl-badge-verified">8 Sources Active</span>
+                </div>
+                <div class="sl-card-body" style="padding:1rem 1.25rem;">
+                  <div class="data-sources-grid">
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Cadastral Maps</div>
+                        <div class="data-source-count">12,842 features</div>
+                      </div>
+                      <span class="sl-badge sl-badge-verified">Validated</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Revenue Records</div>
+                        <div class="data-source-count">12,842 records</div>
+                      </div>
+                      <span class="sl-badge sl-badge-verified">Linked</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Municipal GIS</div>
+                        <div class="data-source-count">8,421 features</div>
+                      </div>
+                      <span class="sl-badge sl-badge-verified">Validated</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Drone Imagery ORI</div>
+                        <div class="data-source-count">5cm GSD (2026)</div>
+                      </div>
+                      <span class="sl-badge sl-badge-info">Processing</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">GNSS / CORS</div>
+                        <div class="data-source-count">6 Ref Stations</div>
+                      </div>
+                      <span class="sl-badge sl-badge-verified">Operational</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Ground Truth</div>
+                        <div class="data-source-count">18 Field Surveys</div>
+                      </div>
+                      <span class="sl-badge sl-badge-verified">Verified</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Building Footprints</div>
+                        <div class="data-source-count">9,420 polygons</div>
+                      </div>
+                      <span class="sl-badge sl-badge-verified">Extracted</span>
+                    </div>
+
+                    <div class="data-source-card">
+                      <div>
+                        <div class="data-source-name">Utility Networks</div>
+                        <div class="data-source-count">142 km Drainage</div>
+                      </div>
+                      <span class="sl-badge sl-badge-neutral">Ingested</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 2: GIS WORKSPACE (THE HEART OF THE PLATFORM)
+               ==================================================================== -->
+          <div id="officer-sec-gis" class="officer-section-view" style="display:none; width:100%; height:calc(100vh - var(--sl-header-height)); position:relative; overflow:hidden;">
+            <div class="gis-workspace-container">
+
+              <!-- Floating Map Toolbar -->
+              <div class="gis-toolbar">
+                <button id="btn-map-zoomin" class="gis-tool-btn" title="Zoom In">+</button>
+                <button id="btn-map-zoomout" class="gis-tool-btn" title="Zoom Out">&minus;</button>
+                <button id="btn-map-location" class="gis-tool-btn" title="My GPS Location">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                </button>
+                <div class="gis-toolbar-separator"></div>
+
+                <!-- GIS Parcel Search Input inside map -->
+                <div style="position:relative; width:220px;">
+                  <input type="text" id="gis-search-input" class="sl-input" placeholder="Search Parcel / Survey No..." style="min-height:34px; padding:0.3rem 0.6rem; font-size:0.8rem;">
+                  <div id="gis-search-results" style="display:none; position:absolute; top:38px; left:0; right:0; background:#fff; border:1px solid var(--sl-border-medium); border-radius:var(--sl-radius-md); box-shadow:var(--sl-shadow-lg); z-index:900;"></div>
+                </div>
+
+                <div class="gis-toolbar-separator"></div>
+                <button id="btn-measure-dist" class="gis-tool-btn" title="Measure Distance">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><path d="M6 12v-4"/><path d="M10 12v-2"/><path d="M14 12v-4"/><path d="M18 12v-2"/></svg>
+                </button>
+                <button id="btn-measure-area" class="gis-tool-btn" title="Measure Polygon Area">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+                </button>
+                <button id="btn-toggle-layers" class="gis-tool-btn" title="Toggle Layer Controls">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>
+                </button>
+                <button id="btn-map-fullscreen" class="gis-tool-btn" title="Toggle Fullscreen">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                </button>
+              </div>
+
+              <!-- Map Viewport -->
+              <div class="gis-map-viewport">
+                <div id="officer-gis-map"></div>
+              </div>
+
+              <!-- Map Legend -->
+              <div class="gis-legend">
+                <div class="gis-legend-title">Map Layer Legend</div>
+                <div class="legend-items">
+                  <div class="legend-entry"><span class="legend-swatch" style="background:#059669;"></span> Officer Verified Parcel</div>
+                  <div class="legend-entry"><span class="legend-swatch" style="background:#2563eb;"></span> Integrated Cadastral Parcel</div>
+                  <div class="legend-entry"><span class="legend-swatch" style="background:#dc2626;"></span> Conflict / Overlap Flag</div>
+                  <div class="legend-entry"><span class="legend-swatch" style="background:#d97706;"></span> Ground Truth Required</div>
+                  <div class="legend-entry"><span class="legend-swatch" style="background:#475569;"></span> Extracted Building Footprint</div>
+                  <div class="legend-entry"><span class="legend-swatch" style="background:#10b981; border-radius:50%;"></span> CORS GNSS Station</div>
+                </div>
+              </div>
+
+              <!-- Floating Multi-Layer Manager Panel -->
+              <div id="gis-layer-panel" class="gis-layer-panel">
+                <div class="layer-panel-header">
+                  <h4>GIS Layer Manager</h4>
+                  <button class="sl-modal-close" onclick="document.getElementById('gis-layer-panel').classList.add('collapsed')">&times;</button>
+                </div>
+                <div class="layer-panel-body">
+                  <!-- Base Map Selection -->
+                  <div>
+                    <div class="layer-group-title">Base Map Layer</div>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="radio" name="basemap-radio" value="street" checked> Street Map (OSM)
+                      </span>
+                    </label>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="radio" name="basemap-radio" value="satellite"> Satellite / Aerial (Esri)
+                      </span>
+                    </label>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="radio" name="basemap-radio" value="light"> Carto Positron (High Contrast)
+                      </span>
+                    </label>
+                  </div>
+
+                  <!-- Land Layers -->
+                  <div>
+                    <div class="layer-group-title">Land &amp; Cadastre</div>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="checkbox" id="layer-cb-cadastral" checked>
+                        <span class="layer-color-dot" style="background:#2563eb;"></span> Cadastral Revenue Boundaries
+                      </span>
+                    </label>
+                    <div class="opacity-slider-row">
+                      <span>Opacity:</span>
+                      <input type="range" id="cadastral-opacity-slider" min="0.1" max="1" step="0.1" value="0.8">
+                    </div>
+                  </div>
+
+                  <!-- Infrastructure Layers -->
+                  <div>
+                    <div class="layer-group-title">Infrastructure &amp; Survey</div>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="checkbox" id="layer-cb-buildings" checked>
+                        <span class="layer-color-dot" style="background:#475569;"></span> Building Footprints (AI Extracted)
+                      </span>
+                    </label>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="checkbox" id="layer-cb-gnss" checked>
+                        <span class="layer-color-dot" style="background:#10b981;"></span> CORS GNSS Geodetic Points
+                      </span>
+                    </label>
+                    <label class="layer-item-row">
+                      <span class="layer-item-label">
+                        <input type="checkbox" id="layer-cb-utilities">
+                        <span class="layer-color-dot" style="background:#0284c7;"></span> Water &amp; Drainage Utilities
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide-out Parcel Intelligence Drawer -->
+              <aside id="parcel-intel-drawer" class="parcel-intel-drawer">
+                <div class="intel-drawer-header">
+                  <div>
+                    <h3 id="intel-parcel-id">TN-MDU-000124</h3>
+                    <p>Survey Number: <strong id="intel-survey-no">S-124/3</strong></p>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span id="intel-status-badge" class="sl-badge sl-badge-verified">Officer Verified</span>
+                    <button id="btn-close-intel-drawer" class="sl-modal-close" style="color:#fff;">&times;</button>
+                  </div>
+                </div>
+
+                <div class="intel-drawer-body">
+                  <!-- Confidence Meter -->
+                  <div class="confidence-meter">
+                    <div class="confidence-circle" id="intel-conf-score">94.6%</div>
+                    <div>
+                      <div style="font-weight:700; color:var(--sl-emerald-700); font-size:0.9rem;">High Analytical Confidence</div>
+                      <div style="font-size:0.75rem; color:var(--sl-text-secondary);">Harmonized against 4 official source layers</div>
+                    </div>
+                  </div>
+
+                  <!-- Property Quick Attributes -->
+                  <div class="intel-section">
+                    <div class="intel-section-title">Property Information</div>
+                    <div class="intel-grid-2">
+                      <div class="intel-data-item">
+                        <span class="label">Total Extent</span>
+                        <span class="value" id="intel-val-area">1,245 sq.m</span>
+                      </div>
+                      <div class="intel-data-item">
+                        <span class="label">Land Use</span>
+                        <span class="value" id="intel-val-landuse">Residential</span>
+                      </div>
+                      <div class="intel-data-item">
+                        <span class="label">Patta Holder</span>
+                        <span class="value" id="intel-val-owner">R. Sundararaman</span>
+                      </div>
+                      <div class="intel-data-item">
+                        <span class="label">Road Access</span>
+                        <span class="value" id="intel-val-road">12m Tar Road</span>
+                      </div>
+                      <div class="intel-data-item">
+                        <span class="label">Ward &amp; Village</span>
+                        <span class="value" id="intel-val-ward">Ward 12, Anuppanadi</span>
+                      </div>
+                      <div class="intel-data-item">
+                        <span class="label">Municipal Tax No</span>
+                        <span class="value" id="intel-val-taxno">TX-2026-8841</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Multi-source Area Discrepancy Box -->
+                  <div class="intel-section">
+                    <div class="intel-section-title">Cross-Source Area Comparison</div>
+                    <div class="intel-source-box">
+                      <div class="source-row">
+                        <span>Revenue Cadastral (FMB):</span>
+                        <strong id="intel-area-cadastral">1,200 sq.m</strong>
+                      </div>
+                      <div class="source-row">
+                        <span>Municipal Property Tax GIS:</span>
+                        <strong id="intel-area-municipal">1,175 sq.m</strong>
+                      </div>
+                      <div class="source-row">
+                        <span>GNSS CORS Geodetic Pegs:</span>
+                        <strong id="intel-area-gnss" style="color:#059669;">1,245 sq.m</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Data Lineage Chain -->
+                  <div class="intel-section">
+                    <div class="intel-section-title">Final Integrated Record Lineage</div>
+                    <div style="font-size:0.8rem; line-height:1.6; color:var(--sl-text-secondary); background:var(--sl-bg-subtle); padding:0.75rem; border-radius:var(--sl-radius-md);">
+                      <div><strong>Boundary:</strong> <span id="intel-lineage-boundary">Cadastral + GNSS Hybrid</span></div>
+                      <div><strong>Area:</strong> <span id="intel-lineage-area">GNSS CORS Verified</span></div>
+                      <div><strong>Land Use:</strong> <span id="intel-lineage-landuse">Municipal GIS Tax Register</span></div>
+                      <div><strong>Building:</strong> <span id="intel-lineage-building">Drone ORI 2026 (5cm GSD)</span></div>
+                      <div><strong>Certification:</strong> <span id="intel-lineage-verify">Ground Truth GT-2026-009</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Action Buttons in Drawer -->
+                  <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.75rem;">
+                    <button class="sl-btn sl-btn-primary" onclick="window.SL_OFFICER.openOfficialEditModal(window.SL_PARCELS.currentSelectedParcelId || 'TN-MDU-000124')">
+                      Edit Official Record
+                    </button>
+                    <button class="sl-btn sl-btn-outline" onclick="window.SL_PARCELS.openParcelModal(window.SL_PARCELS.currentSelectedParcelId || 'TN-MDU-000124')">
+                      View Full Certification Dossier
+                    </button>
+                    <button class="sl-btn sl-btn-outline" onclick="window.SL_OFFICER.requestFieldSurvey(window.SL_PARCELS.currentSelectedParcelId || 'TN-MDU-000124')">
+                      Assign Ground-Truthing Survey
+                    </button>
+                  </div>
+                </div>
+              </aside>
+
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 3: DATASET MANAGEMENT & UPLOAD
+               ==================================================================== -->
+          <div id="officer-sec-datasets" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <h2>Multi-Source Dataset Catalog</h2>
+                <p>Register, ingest, and georeference multi-departmental land and geospatial datasets.</p>
+              </div>
+              <div>
+                <button id="btn-open-dataset-upload" class="sl-btn sl-btn-primary">
+                  + Ingest New Dataset
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Controls -->
+            <div style="margin-bottom:1rem; display:flex; gap:1rem; align-items:center;">
+              <div style="width:260px;">
+                <select id="dataset-filter-dept" class="sl-select">
+                  <option value="all">All Departments</option>
+                  <option value="Revenue Department">Revenue Department</option>
+                  <option value="Municipal Administration">Municipal Administration</option>
+                  <option value="Survey Department">Survey Department</option>
+                  <option value="GIS Administration">GIS Administration</option>
+                  <option value="Urban Planning">Urban Planning</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Datasets Table -->
+            <div class="sl-table-container">
+              <table class="sl-table">
+                <thead>
+                  <tr>
+                    <th>Dataset Name</th>
+                    <th>Department</th>
+                    <th>Type</th>
+                    <th>Format</th>
+                    <th>Upload Date</th>
+                    <th>CRS</th>
+                    <th>Features</th>
+                    <th>Quality</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="datasets-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 4: AI GEOSPATIAL HARMONIZATION ENGINE
+               ==================================================================== -->
+          <div id="officer-sec-harmonization" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <h2>AI Geospatial Harmonization Engine</h2>
+                <p>Integrated processing: Spatial matching, attribute alignment, and automated topology validation.</p>
+              </div>
+              <div>
+                <button id="btn-run-harmonization" class="sl-btn sl-btn-primary">
+                  Run Harmonization Engine
+                </button>
+              </div>
+            </div>
+
+            <!-- Architecture Diagram Visualization Box -->
+            <div class="sl-card" style="margin-bottom:1.5rem; padding:1.25rem; background:linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+              <h4 style="margin-bottom:0.75rem; color:var(--sl-navy-900);">Multi-Source Harmonization Architecture (SIH26013)</h4>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.5rem; font-size:0.775rem; font-weight:700; color:var(--sl-navy-800);">
+                <span class="sl-badge sl-badge-neutral">Cadastral FMB</span> +
+                <span class="sl-badge sl-badge-neutral">High-Res Drone ORI</span> +
+                <span class="sl-badge sl-badge-neutral">Municipal GIS</span> +
+                <span class="sl-badge sl-badge-neutral">GNSS / CORS</span> +
+                <span class="sl-badge sl-badge-neutral">Building Footprints</span>
+                <span style="color:var(--sl-blue-700); font-size:1.1rem; margin:0 0.5rem;">&rarr;</span>
+                <span class="sl-badge sl-badge-info">AI SPATIAL MATCHING</span> &rarr;
+                <span class="sl-badge sl-badge-info">ATTRIBUTE HARMONIZATION</span> &rarr;
+                <span class="sl-badge sl-badge-info">TOPOLOGY REPAIR</span> &rarr;
+                <span class="sl-badge sl-badge-verified">CERTIFIED RECORD</span>
+              </div>
+            </div>
+
+            <!-- Spatial Matching & Attribute Mapping Grid -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+              <!-- AI Spatial Matching Box -->
+              <div class="sl-card">
+                <div class="sl-card-header">
+                  <h3>AI Spatial Boundary Matching</h3>
+                  <span class="sl-badge sl-badge-verified">96.4% Match</span>
+                </div>
+                <div class="sl-card-body">
+                  <p style="font-size:0.85rem; color:var(--sl-text-secondary); margin-bottom:1rem;">
+                    Cross-verification between <strong>Revenue Cadastral</strong> vectors and <strong>5cm Drone ORI</strong> boundaries for Ward 12.
+                  </p>
+                  <div class="intel-source-box" style="margin-bottom:1rem;">
+                    <div class="source-row"><span>Boundary Line Alignment:</span> <strong>96.2%</strong></div>
+                    <div class="source-row"><span>Area Extent Similarity:</span> <strong>94.8%</strong></div>
+                    <div class="source-row"><span>Centroid Offset Deviation:</span> <strong>1.8 meters</strong></div>
+                  </div>
+                  <button id="btn-view-evidence" class="sl-btn sl-btn-outline" style="width:100%;">
+                    View Spatial Alignment Evidence
+                  </button>
+                </div>
+              </div>
+
+              <!-- AI Attribute Mapping Box -->
+              <div class="sl-card">
+                <div class="sl-card-header">
+                  <h3>Attribute Schema Alignment</h3>
+                  <span class="sl-badge sl-badge-info">AI Inferred</span>
+                </div>
+                <div class="sl-card-body">
+                  <p style="font-size:0.85rem; color:var(--sl-text-secondary); margin-bottom:1rem;">
+                    Intelligent mapping of legacy column headers into unified national land data standards.
+                  </p>
+                  <div id="attribute-mapping-list"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Topology Validation Table -->
+            <div class="sl-card">
+              <div class="sl-card-header">
+                <div>
+                  <h3>Automated Topology Validation</h3>
+                  <div style="font-size:0.8rem; color:var(--sl-text-secondary);">Detects sliver polygons, overlaps, boundary gaps and self-intersections.</div>
+                </div>
+              </div>
+              <div class="sl-card-body" style="padding:0;">
+                <div class="sl-table-container" style="border:none;">
+                  <table class="sl-table">
+                    <thead>
+                      <tr>
+                        <th>Topology Issue</th>
+                        <th>Affected Parcels</th>
+                        <th>Extent / Deviation</th>
+                        <th>Severity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="topology-issues-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 5: LAND PARCELS CATALOG
+               ==================================================================== -->
+          <div id="officer-sec-parcels" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <h2>Integrated Land Parcels Register</h2>
+                <p>Official spatial records with multi-source area reconciliation and confidence metrics.</p>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div style="margin-bottom:1rem; display:flex; gap:1rem; align-items:center;">
+              <div style="width:220px;">
+                <select id="parcel-filter-status" class="sl-select">
+                  <option value="all">All Verification Statuses</option>
+                  <option value="Officer Verified">Officer Verified</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Conflict Detected">Conflict Detected</option>
+                  <option value="Ground Truth Required">Ground Truth Required</option>
+                </select>
+              </div>
+              <div style="width:220px;">
+                <select id="parcel-filter-landuse" class="sl-select">
+                  <option value="all">All Land Use Classes</option>
+                  <option value="Residential">Residential</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Institutional">Institutional</option>
+                  <option value="Agricultural / Peri-Urban">Agricultural</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Parcels Table -->
+            <div class="sl-table-container">
+              <table class="sl-table">
+                <thead>
+                  <tr>
+                    <th>Parcel ID</th>
+                    <th>Survey No</th>
+                    <th>Location</th>
+                    <th>Extent (sq.m)</th>
+                    <th>Land Use</th>
+                    <th>Status</th>
+                    <th>Confidence</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="parcels-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 6: CONFLICT RESOLUTION CENTER
+               ==================================================================== -->
+          <div id="officer-sec-conflicts" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <h2>Conflict Resolution Center</h2>
+                <p>Human-in-the-Loop decision gateway: Compare disparate source values and certify resolutions.</p>
+              </div>
+            </div>
+
+            <!-- Conflict Filters -->
+            <div style="margin-bottom:1.25rem; display:flex; gap:1rem; align-items:center;">
+              <div style="width:200px;">
+                <select id="conflict-filter-severity" class="sl-select">
+                  <option value="all">All Severities</option>
+                  <option value="Critical">Critical Discrepancies</option>
+                  <option value="High">High Severity</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+              <div style="width:200px;">
+                <select id="conflict-filter-status" class="sl-select">
+                  <option value="all">All Statuses</option>
+                  <option value="Pending Review">Pending Review</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Ground Truth Required">Ground Truth Required</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Conflicts Container -->
+            <div id="conflicts-container"></div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 7: TEMPORAL CHANGE DETECTION & BEFORE/AFTER SLIDER
+               ==================================================================== -->
+          <div id="officer-sec-changes" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <h2>Temporal Change Detection (2024 to 2026)</h2>
+                <p>AI computer vision tracking of newly constructed structures, boundary realignments, and demolitions.</p>
+              </div>
+              <!-- Timeline Selector -->
+              <div style="display:flex; gap:0.25rem; background:var(--sl-bg-subtle); padding:0.25rem; border-radius:var(--sl-radius-md);">
+                <button class="sl-btn sl-btn-sm timeline-year-btn" data-year="2024">2024 Baseline</button>
+                <button class="sl-btn sl-btn-sm timeline-year-btn" data-year="2025">2025 Update</button>
+                <button class="sl-btn sl-btn-sm timeline-year-btn active" data-year="2026">2026 Drone ORI</button>
+              </div>
+            </div>
+
+            <!-- Interactive Before / After Split Screen Slider -->
+            <div class="sl-card" style="margin-bottom:1.5rem; padding:1.25rem;">
+              <h3 style="margin-bottom:0.75rem;">Interactive Temporal Map Comparison Slider</h3>
+              <p style="font-size:0.8rem; color:var(--sl-text-secondary); margin-bottom:1rem;">
+                Drag the center vertical divider left and right to inspect structural evolution between 2024 Cadastral baseline and 2026 High-Res Drone Imagery.
+              </p>
+
+              <div id="ba-comparison-container" class="before-after-container">
+                <!-- Left Pill -->
+                <div class="ba-badge-pill ba-badge-before">&larr; 2024 Legacy Cadastre Baseline</div>
+                <!-- Right Pill -->
+                <div class="ba-badge-pill ba-badge-after">2026 High-Res Drone ORI &rarr;</div>
+
+                <!-- After Map (Base bottom) -->
+                <div id="ba-layer-after" class="ba-layer ba-layer-after">
+                  <div id="ba-map-after" class="ba-map"></div>
+                </div>
+
+                <!-- Before Map (Clipped top layer) -->
+                <div id="ba-layer-before" class="ba-layer ba-layer-before" style="width:50%;">
+                  <div id="ba-map-before" class="ba-map"></div>
+                </div>
+
+                <!-- Draggable Split Divider -->
+                <div id="ba-slider-divider" class="ba-slider-divider" style="left:50%;">
+                  <div class="ba-slider-handle">&harr;</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detected Changes Table -->
+            <div class="sl-card">
+              <div class="sl-card-header">
+                <h3>Detected Temporal Modifications List</h3>
+              </div>
+              <div class="sl-card-body" style="padding:0;">
+                <div class="sl-table-container" style="border:none;">
+                  <table class="sl-table">
+                    <thead>
+                      <tr>
+                        <th>Change ID</th>
+                        <th>Parcel</th>
+                        <th>Change Category</th>
+                        <th>Spatial Description</th>
+                        <th>Area Delta</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="changes-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 8: FIELD GROUND-TRUTHING & MOBILE GPS/CAMERA
+               ==================================================================== -->
+          <div id="officer-sec-surveys" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem;">
+              <h2>Field Ground-Truthing &amp; Geodetic Verification</h2>
+              <p>On-site survey submission with live GPS coordinates capture, photograph evidence, and offline synchronization.</p>
+            </div>
+
+            <!-- Field Survey Submission Card -->
+            <div class="sl-card" style="margin-bottom:1.5rem; padding:1.5rem; border-top:4px solid var(--sl-blue-700);">
+              <h3 style="margin-bottom:1rem;">New Field Ground-Truth Record</h3>
+              <form id="form-ground-truth-survey">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+                  <div class="sl-form-group">
+                    <label class="sl-label" for="survey-parcel-id">Target Parcel ID</label>
+                    <select id="survey-parcel-id" class="sl-select" required>
+                      <option value="TN-MDU-000124">TN-MDU-000124 (S-124/3)</option>
+                      <option value="TN-MDU-000126">TN-MDU-000126 (S-124/5 - Area Discrepancy)</option>
+                      <option value="TN-MDU-000128">TN-MDU-000128 (S-125/2 - New Commercial RCC)</option>
+                      <option value="TN-MDU-000132">TN-MDU-000132 (S-126/3 - Boundary Overlap)</option>
+                      <option value="TN-MDU-000133">TN-MDU-000133 (S-127/1 - Agricultural Plotted Layout)</option>
+                    </select>
+                  </div>
+
+                  <div class="sl-form-group">
+                    <label class="sl-label" for="survey-land-use">Observed Physical Land Use</label>
+                    <select id="survey-land-use" class="sl-select">
+                      <option value="Residential">Residential</option>
+                      <option value="Commercial Multi-Storey Retail">Commercial Multi-Storey Retail</option>
+                      <option value="Institutional / Public">Institutional / Public</option>
+                      <option value="Peri-Urban Plotted Layout">Peri-Urban Plotted Layout</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- GPS & Camera Integration Row -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin:1rem 0; padding:1rem; background:var(--sl-bg-subtle); border-radius:var(--sl-radius-md);">
+                  <div>
+                    <label class="sl-label" style="display:block; margin-bottom:0.5rem;">Geodetic GPS Location</label>
+                    <button type="button" id="btn-capture-gps" class="sl-btn sl-btn-secondary sl-btn-sm" style="margin-bottom:0.5rem;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                      CAPTURE GPS FIX
+                    </button>
+                    <div id="gps-coords-display" style="font-size:0.775rem; color:var(--sl-text-secondary);">
+                      Coordinates not yet recorded
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="sl-label" style="display:block; margin-bottom:0.5rem;">Field Photo Verification</label>
+                    <button type="button" id="btn-capture-photo" class="sl-btn sl-btn-secondary sl-btn-sm" style="margin-bottom:0.5rem;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                      CAPTURE / UPLOAD PHOTO
+                    </button>
+                    <div id="photo-preview-container" style="display:none; align-items:center; gap:0.5rem;">
+                      <img id="photo-preview-img" src="" alt="Field Preview" style="width:60px; height:45px; object-fit:cover; border-radius:4px; border:1px solid #cbd5e1;">
+                      <button type="button" id="btn-remove-photo" style="background:none; border:none; color:#dc2626; font-size:0.75rem; cursor:pointer;">Remove</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sl-form-group">
+                  <label class="sl-label" for="survey-boundary-notes">Observed Physical Boundary Description</label>
+                  <textarea id="survey-boundary-notes" class="sl-textarea" rows="2" placeholder="e.g. Masonry compound wall on East, survey stone planted on North corner..."></textarea>
+                </div>
+
+                <div class="sl-form-group">
+                  <label class="sl-label" for="survey-general-notes">Surveyor Notes &amp; Observations</label>
+                  <textarea id="survey-general-notes" class="sl-textarea" rows="2" placeholder="e.g. Neighboring patta holders verified corner coordinates with RTK CORS fix."></textarea>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+                  <button type="submit" class="sl-btn sl-btn-primary">
+                    SUBMIT VERIFICATION RECORD
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Ground Truthing Survey Table -->
+            <div class="sl-card">
+              <div class="sl-card-header">
+                <h3>Recorded Field Survey Tasks</h3>
+              </div>
+              <div class="sl-card-body" style="padding:0;">
+                <div class="sl-table-container" style="border:none;">
+                  <table class="sl-table">
+                    <thead>
+                      <tr>
+                        <th>Task ID</th>
+                        <th>Parcel</th>
+                        <th>Officer</th>
+                        <th>Survey Date</th>
+                        <th>Geodetic GPS Coords</th>
+                        <th>Observed Land Use</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="surveys-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 9: GNSS / CORS CONTINUOUS GEODETIC NETWORK
+               ==================================================================== -->
+          <div id="officer-sec-gnss" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <h2>GNSS / CORS Continuous Geodetic Network</h2>
+                <p>Real-Time Kinematic (RTK) reference stations supporting centimeter-level cadastral boundary fixes.</p>
+              </div>
+              <button id="btn-detect-gnss-mismatch" class="sl-btn sl-btn-primary">
+                Detect Coordinate Mismatch
+              </button>
+            </div>
+
+            <div class="sl-table-container">
+              <table class="sl-table">
+                <thead>
+                  <tr>
+                    <th>Station ID</th>
+                    <th>Station Name</th>
+                    <th>Coordinates (WGS84)</th>
+                    <th>Elevation</th>
+                    <th>Accuracy</th>
+                    <th>Network Status</th>
+                  </tr>
+                </thead>
+                <tbody id="gnss-stations-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 10: REPORTS & EXPORT CENTER
+               ==================================================================== -->
+          <div id="officer-sec-reports" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem;">
+              <h2>Government Reports &amp; Certification Center</h2>
+              <p>Generate certified statutory land integration dossiers, conflict audit certificates, and data quality reports.</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.25rem;">
+              <!-- 6 Report Cards -->
+              <div class="sl-card">
+                <div class="sl-card-body">
+                  <h4>Land Integration Report</h4>
+                  <p style="font-size:0.85rem; margin:0.5rem 0 1rem;">Complete harmonized cadastral parcel boundaries, area reconciliations, and geodetic coordinates.</p>
+                  <button class="sl-btn sl-btn-primary sl-btn-sm btn-generate-report" data-report-type="land-integration">Generate &amp; Preview</button>
+                </div>
+              </div>
+              <div class="sl-card">
+                <div class="sl-card-body">
+                  <h4>Parcel Validation Report</h4>
+                  <p style="font-size:0.85rem; margin:0.5rem 0 1rem;">Individual property verification record with patta number, municipal tax ID, and CORS survey pegs.</p>
+                  <button class="sl-btn sl-btn-primary sl-btn-sm btn-generate-report" data-report-type="parcel-validation">Generate &amp; Preview</button>
+                </div>
+              </div>
+              <div class="sl-card">
+                <div class="sl-card-body">
+                  <h4>Conflict &amp; Discrepancy Report</h4>
+                  <p style="font-size:0.85rem; margin:0.5rem 0 1rem;">Audit trail of detected multi-source discrepancies, officer resolutions, and legal evidence.</p>
+                  <button class="sl-btn sl-btn-primary sl-btn-sm btn-generate-report" data-report-type="conflicts">Generate &amp; Preview</button>
+                </div>
+              </div>
+              <div class="sl-card">
+                <div class="sl-card-body">
+                  <h4>Change Detection Audit</h4>
+                  <p style="font-size:0.85rem; margin:0.5rem 0 1rem;">Temporal summary of new constructions, boundary modifications, and urban planning compliance.</p>
+                  <button class="sl-btn sl-btn-primary sl-btn-sm btn-generate-report" data-report-type="changes">Generate &amp; Preview</button>
+                </div>
+              </div>
+              <div class="sl-card">
+                <div class="sl-card-body">
+                  <h4>Field Ground Truthing Report</h4>
+                  <p style="font-size:0.85rem; margin:0.5rem 0 1rem;">Mobile tablet field verifications, GPS coordinates log, and photographic evidence ledger.</p>
+                  <button class="sl-btn sl-btn-primary sl-btn-sm btn-generate-report" data-report-type="surveys">Generate &amp; Preview</button>
+                </div>
+              </div>
+              <div class="sl-card">
+                <div class="sl-card-body">
+                  <h4>Data Quality &amp; Lineage Certification</h4>
+                  <p style="font-size:0.85rem; margin:0.5rem 0 1rem;">Six-dimensional quality score: Completeness, Accuracy, Consistency, Validity, and Spatial Precision.</p>
+                  <button class="sl-btn sl-btn-primary sl-btn-sm btn-generate-report" data-report-type="quality">Generate &amp; Preview</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 11: INTER-DEPARTMENTAL DATA EXCHANGE
+               ==================================================================== -->
+          <div id="officer-sec-exchange" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem;">
+              <h2>Inter-Departmental Geospatial Data Exchange</h2>
+              <p>Facilitate seamless cross-agency collaboration between Revenue, Municipal GIS, Survey, and Town Planning.</p>
+            </div>
+
+            <div class="sl-table-container">
+              <table class="sl-table">
+                <thead>
+                  <tr>
+                    <th>Department</th>
+                    <th>Shared Dataset Corridors</th>
+                    <th>Format</th>
+                    <th>Last Synced</th>
+                    <th>Exchange Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="data-exchange-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 12: TAMPER-EVIDENT AUDIT LOGS
+               ==================================================================== -->
+          <div id="officer-sec-audit" class="officer-section-view page-container" style="display:none;">
+            <div style="margin-bottom:1.5rem;">
+              <h2>Administrative Audit Trail</h2>
+              <p>Tamper-evident chronological log of all ingestions, AI harmonizations, conflict resolutions, and officer certifications.</p>
+            </div>
+
+            <div class="sl-table-container">
+              <table class="sl-table">
+                <thead>
+                  <tr>
+                    <th>Log ID</th>
+                    <th>Authorized Officer / Role</th>
+                    <th>Operation</th>
+                    <th>Parcel Reference</th>
+                    <th>Dataset Source</th>
+                    <th>Timestamp</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-logs-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUB-VIEW 13: SETTINGS & PREFERENCES
+               ==================================================================== -->
+          <div id="officer-sec-settings" class="officer-section-view page-container" style="display:none;">
+            <div class="sl-card" style="max-width:680px; padding:2rem;">
+              <h2 style="margin-bottom:1.5rem;">System Settings &amp; Preferences</h2>
+
+              <div class="sl-form-group">
+                <label class="sl-label" for="setting-language-select">Interface Language (தமிழ் / हिन्दी / English)</label>
+                <select id="setting-language-select" class="sl-select">
+                  <option value="en">English (Official Enterprise)</option>
+                  <option value="ta">தமிழ் (Tamil - State Administration)</option>
+                  <option value="hi">हिन्दी (Hindi - National Standard)</option>
+                </select>
+              </div>
+
+              <div class="sl-form-group" style="margin-top:1.5rem;">
+                <label class="sl-label">Coordinate Display Format</label>
+                <select class="sl-select">
+                  <option value="dd">Decimal Degrees (9.9248° N, 78.1186° E)</option>
+                  <option value="dms">Degrees Minutes Seconds (9° 55' 29" N, 78° 07' 06" E)</option>
+                  <option value="utm">UTM Projection (Zone 44N)</option>
+                </select>
+              </div>
+
+              <div style="border-top:1px solid var(--sl-border-light); padding-top:1.5rem; margin-top:2rem;">
+                <h4 style="color:var(--sl-rose-700); margin-bottom:0.5rem;">Hackathon Demo State Reset</h4>
+                <p style="font-size:0.8rem; color:var(--sl-text-secondary); margin-bottom:1rem;">
+                  Re-initialize all demo datasets, conflicts, surveys, and requests back to factory defaults.
+                </p>
+                <button id="btn-reset-demo-data" class="sl-btn sl-btn-danger">
+                  Reset Demo State to Initial Defaults
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide-out Smart AI Assistant Panel -->
+      <div id="officer-ai-assistant-panel" style="position:fixed; right:-400px; top:var(--sl-header-height); bottom:0; width:380px; background:#fff; border-left:1px solid var(--sl-border-medium); box-shadow:var(--sl-shadow-xl); z-index:950; display:flex; flex-direction:column; transition:right 0.3s cubic-bezier(0.16,1,0.3,1);">
+        <div style="padding:1rem 1.25rem; border-bottom:1px solid var(--sl-border-light); display:flex; justify-content:space-between; align-items:center; background:var(--sl-navy-900); color:#fff;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <strong style="font-size:0.95rem;">SLI AI Geospatial Assistant</strong>
+          </div>
+          <button id="btn-close-ai-assistant" class="sl-modal-close" style="color:#fff;" onclick="document.getElementById('officer-ai-assistant-panel').style.right='-400px';">&times;</button>
+        </div>
+
+        <div id="ai-assistant-messages" style="flex:1; padding:1.25rem; overflow-y:auto; display:flex; flex-direction:column; background:var(--sl-bg-main);">
+          <div style="align-self:flex-start; background:#fff; border:1px solid var(--sl-border-light); padding:0.75rem 1rem; border-radius:12px 12px 12px 2px; font-size:0.825rem; max-width:90%; margin-bottom:0.75rem; box-shadow:var(--sl-shadow-xs);">
+            <div style="font-weight:700; color:var(--sl-blue-800); font-size:0.75rem; margin-bottom:0.25rem;">SLI AI Geospatial Assistant</div>
+            Good day, Officer. I can analyze multi-source discrepancies, identify low confidence records, or filter temporal changes across your jurisdiction.
+          </div>
+        </div>
+
+        <!-- Quick AI Chips -->
+        <div style="padding:0.5rem 1rem; background:#fff; border-top:1px solid var(--sl-border-light); display:flex; flex-wrap:wrap; gap:0.35rem;">
+          <button class="sl-btn sl-btn-outline sl-btn-sm ai-prompt-chip" data-query="Show parcels with conflicts">Show Conflicts</button>
+          <button class="sl-btn sl-btn-outline sl-btn-sm ai-prompt-chip" data-query="Which parcels have low confidence?">Low Confidence</button>
+          <button class="sl-btn sl-btn-outline sl-btn-sm ai-prompt-chip" data-query="Show changes in Ward 12">Ward 12 Changes</button>
+          <button class="sl-btn sl-btn-outline sl-btn-sm ai-prompt-chip" data-query="How many parcels are pending review?">Pending Reviews</button>
+        </div>
+
+        <form id="form-ai-assistant" style="padding:0.75rem 1rem; border-top:1px solid var(--sl-border-light); background:#fff; display:flex; gap:0.5rem;">
+          <input type="text" id="ai-assistant-input" class="sl-input" placeholder="Ask SLI AI about parcels, conflicts..." style="min-height:36px;">
+          <button type="submit" class="sl-btn sl-btn-primary sl-btn-sm" style="min-height:36px;">Ask</button>
+        </form>
+      </div>
+
+      <!-- Mobile Officer Bottom Navigation -->
+      <nav class="mobile-bottom-nav officer-nav">
+        <a class="mobile-nav-item active" data-sec="dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="mobile-nav-item" data-sec="gis">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+          <span>GIS Map</span>
+        </a>
+        <a class="mobile-nav-item" data-sec="conflicts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          <span>Conflicts</span>
+        </a>
+        <a class="mobile-nav-item" data-sec="surveys">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Surveys</span>
+        </a>
+        <a class="mobile-nav-item" data-sec="settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- ====================================================================
+         MODALS COLLECTION
+         ==================================================================== -->
+
+    <!-- 1. 2FA / Registration OTP Modal -->
+    <div id="modal-otp" class="sl-modal-backdrop">
+      <div class="sl-modal" style="max-width:440px;">
+        <div class="sl-modal-header">
+          <h3 id="otp-modal-title">Verification Required</h3>
+          <button class="sl-modal-close">&times;</button>
+        </div>
+        <div class="sl-modal-body" style="text-align:center;">
+          <p id="otp-modal-subtitle" style="font-size:0.85rem; margin-bottom:1.5rem;">Enter the 6-digit verification code sent to your registered device.</p>
+          <div class="otp-input-group">
+            <input type="text" id="otp-input-code" class="sl-input" maxlength="6" style="width:200px; text-align:center; font-size:1.6rem; font-family:var(--sl-font-mono); letter-spacing:0.3em;" value="123456">
+          </div>
+          <p style="font-size:0.75rem; color:var(--sl-text-muted);">Demo Verification Code: <strong>123456</strong></p>
+        </div>
+        <div class="sl-modal-footer">
+          <button id="btn-verify-otp" class="sl-btn sl-btn-primary" style="width:100%;">Verify &amp; Proceed</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Full Parcel Dossier Modal -->
+    <div id="modal-parcel-details" class="sl-modal-backdrop">
+      <div class="sl-modal sl-modal-lg">
+        <div class="sl-modal-header">
+          <h3 id="modal-parcel-title">Parcel Record Dossier</h3>
+          <button class="sl-modal-close" onclick="window.SL_PARCELS.closeParcelModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body">
+          <div class="intel-grid-2" style="margin-bottom:1.25rem;">
+            <div class="intel-data-item"><span class="label">Parcel ID</span><span class="value" id="detail-prop-id"></span></div>
+            <div class="intel-data-item"><span class="label">Survey Number</span><span class="value" id="detail-survey-no"></span></div>
+            <div class="intel-data-item"><span class="label">Recorded Extent</span><span class="value" id="detail-area"></span></div>
+            <div class="intel-data-item"><span class="label">Land Use Classification</span><span class="value" id="detail-landuse"></span></div>
+            <div class="intel-data-item"><span class="label">Registered Title Holder</span><span class="value" id="detail-owner"></span></div>
+            <div class="intel-data-item"><span class="label">Administrative Ward</span><span class="value" id="detail-ward"></span></div>
+            <div class="intel-data-item"><span class="label">AI Confidence Score</span><span class="value" id="detail-confidence" style="color:#059669;"></span></div>
+            <div class="intel-data-item"><span class="label">Verification State</span><span class="value" id="detail-status"></span></div>
+          </div>
+
+          <h4 style="margin:1.25rem 0 0.5rem;">Cadastral Verification &amp; Audit History</h4>
+          <div class="sl-table-container">
+            <table class="sl-table">
+              <thead>
+                <tr><th>Date</th><th>Milestone / Verification Event</th></tr>
+              </thead>
+              <tbody id="modal-parcel-history"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sl-modal-footer">
+          <button class="sl-btn sl-btn-outline" onclick="window.SL_PARCELS.closeParcelModal()">Close</button>
+          <button class="sl-btn sl-btn-primary" onclick="window.SL_REPORTS.generateReport('parcel-validation')">Generate Certified Patta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2B. Official Land Record Modification Modal -->
+    <div id="modal-official-record-edit" class="sl-modal-backdrop">
+      <div class="sl-modal" style="max-width:580px;">
+        <div class="sl-modal-header">
+          <div>
+            <h3>Official Record Modification</h3>
+            <div style="font-size:0.8rem; color:var(--sl-text-secondary);">Target Land Record: <strong id="edit-target-id" style="font-family:var(--sl-font-mono);">TN-MDU-000124</strong></div>
+          </div>
+          <button class="sl-modal-close" onclick="window.SL_OFFICER.closeOfficialEditModal()">&times;</button>
+        </div>
+        <form id="form-official-record-edit">
+          <div class="sl-modal-body">
+            <div style="background:#FFF8E1; border:1px solid #FFE082; border-radius:var(--sl-radius-xs); padding:0.6rem 0.85rem; margin-bottom:1.25rem; font-size:0.775rem; color:#8D5B00; line-height:1.4;">
+              <strong>&#9888; STATUTORY NOTICE:</strong> You are modifying an authorized government cadastral record. All modifications will be permanently recorded in the administrative audit ledger with officer ID, geodetic timestamp, and IP trace.
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div class="sl-form-group">
+                <label class="sl-label" for="edit-survey-no">Survey Number</label>
+                <input type="text" id="edit-survey-no" class="sl-input" required>
+              </div>
+              <div class="sl-form-group">
+                <label class="sl-label" for="edit-area">Total Extent (sq. meters)</label>
+                <input type="number" id="edit-area" class="sl-input" step="0.1" required>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div class="sl-form-group">
+                <label class="sl-label" for="edit-land-use">Authorized Land Use</label>
+                <select id="edit-land-use" class="sl-select">
+                  <option value="Residential">Residential</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Institutional">Institutional</option>
+                  <option value="Agricultural / Peri-Urban">Agricultural / Peri-Urban</option>
+                  <option value="Industrial">Industrial</option>
+                  <option value="Public / Government">Public / Government</option>
+                </select>
+              </div>
+              <div class="sl-form-group">
+                <label class="sl-label" for="edit-status">Verification State</label>
+                <select id="edit-status" class="sl-select">
+                  <option value="Officer Verified">Officer Verified (Certified)</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Conflict Detected">Conflict Detected</option>
+                  <option value="Ground Truth Required">Ground Truth Required</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="sl-form-group">
+              <label class="sl-label" for="edit-owner">Registered Title Holder</label>
+              <input type="text" id="edit-owner" class="sl-input" required>
+            </div>
+
+            <div class="sl-form-group">
+              <label class="sl-label" for="edit-remarks">Official Determination Remarks / Justification</label>
+              <textarea id="edit-remarks" class="sl-textarea" rows="3" placeholder="Enter basis of modification (e.g. Total Station Survey, CORS Benchmark Demarcation, Gazette Notification)..." required></textarea>
+            </div>
+          </div>
+          <div class="sl-modal-footer">
+            <button type="button" class="sl-btn sl-btn-outline" onclick="window.SL_OFFICER.closeOfficialEditModal()">Cancel</button>
+            <button type="submit" class="sl-btn sl-btn-primary">
+              CONFIRM &amp; SAVE RECORD
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 3. Dataset Upload Drag-and-Drop Modal -->
+    <div id="modal-dataset-upload" class="sl-modal-backdrop">
+      <div class="sl-modal">
+        <div class="sl-modal-header">
+          <h3>Ingest Government Geospatial Dataset</h3>
+          <button class="sl-modal-close" onclick="window.SL_DATASETS.closeUploadModal()">&times;</button>
+        </div>
+        <form id="form-dataset-upload">
+          <div class="sl-modal-body">
+            <!-- Drop Zone -->
+            <div id="dataset-drop-zone" style="border:2px dashed var(--sl-border-medium); border-radius:var(--sl-radius-lg); padding:2rem; text-align:center; cursor:pointer; background:var(--sl-bg-subtle); margin-bottom:1.25rem;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--sl-blue-700)" stroke-width="2" style="margin-bottom:0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div style="font-weight:700; color:var(--sl-navy-900);">Drag and drop GIS files here, or click to browse</div>
+              <div style="font-size:0.775rem; color:var(--sl-text-muted); margin-top:0.25rem;">
+                Supported: GeoJSON, Shapefile ZIP, GeoTIFF, KML, KMZ, CSV, LiDAR LAS
+              </div>
+              <input type="file" id="dataset-file-input" style="display:none;" accept=".geojson,.json,.zip,.kml,.kmz,.tif,.tiff,.csv">
+              <div style="margin-top:0.5rem; font-size:0.8rem; color:var(--sl-blue-700); font-weight:600;">
+                Selected: <span id="selected-file-name">None</span> (<span id="selected-file-size">0 MB</span>)
+              </div>
+            </div>
+
+            <div class="sl-form-group">
+              <label class="sl-label" for="upload-ds-name">Dataset Name</label>
+              <input type="text" id="upload-ds-name" class="sl-input" placeholder="e.g. Ward 12 Drone Orthomosaic 2026" required>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div class="sl-form-group">
+                <label class="sl-label" for="upload-ds-dept">Source Department</label>
+                <select id="upload-ds-dept" class="sl-select">
+                  <option value="Survey Department">Survey Department</option>
+                  <option value="Revenue Department">Revenue Department</option>
+                  <option value="Municipal Administration">Municipal Administration</option>
+                  <option value="GIS Administration">GIS Administration</option>
+                  <option value="Urban Planning">Urban Planning</option>
+                </select>
+              </div>
+              <div class="sl-form-group">
+                <label class="sl-label" for="upload-ds-category">Spatial Category</label>
+                <select id="upload-ds-category" class="sl-select">
+                  <option value="Cadastral">Cadastral Parcels</option>
+                  <option value="Drone / ORI">High-Res Drone Ortho (ORI)</option>
+                  <option value="Municipal GIS">Municipal Tax Polygons</option>
+                  <option value="GNSS / CORS">GNSS Benchmarks</option>
+                  <option value="Building Footprints">Building Footprints</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div class="sl-form-group">
+                <label class="sl-label" for="upload-ds-crs">Coordinate Reference System (CRS)</label>
+                <input type="text" id="upload-ds-crs" class="sl-input" value="EPSG:32644 (UTM Zone 44N)">
+              </div>
+              <div class="sl-form-group">
+                <label class="sl-label" for="upload-ds-date">Survey Date</label>
+                <input type="date" id="upload-ds-date" class="sl-input" value="2026-03-22">
+              </div>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="upload-ds-desc">Ingestion Notes / Lineage</label>
+              <textarea id="upload-ds-desc" class="sl-textarea" rows="2" placeholder="Captured under modern urban survey modernization campaign."></textarea>
+            </div>
+          </div>
+          <div class="sl-modal-footer">
+            <button type="button" class="sl-btn sl-btn-outline" onclick="window.SL_DATASETS.closeUploadModal()">Cancel</button>
+            <button type="submit" class="sl-btn sl-btn-primary">START PROCESSING PIPELINE</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 4. Dataset Processing Simulation Pipeline Modal -->
+    <div id="modal-dataset-processing" class="sl-modal-backdrop">
+      <div class="sl-modal" style="max-width:540px;">
+        <div class="sl-modal-header">
+          <h3 id="proc-modal-title">Dataset Processing Pipeline</h3>
+          <button class="sl-modal-close" onclick="window.SL_DATASETS.closeProcessingModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body">
+          <div id="proc-live-status">
+            <div style="display:flex; justify-content:space-between; font-weight:700; font-size:0.875rem; margin-bottom:0.5rem;">
+              <span id="proc-current-stage">Initializing File Ingestion...</span>
+              <span id="proc-progress-pct">0%</span>
+            </div>
+            <div class="sl-progress-bar" style="margin-bottom:1.25rem;">
+              <div id="proc-progress-fill" class="sl-progress-fill" style="width:0%;"></div>
+            </div>
+            <div style="font-size:0.75rem; font-weight:700; color:var(--sl-text-muted); text-transform:uppercase; margin-bottom:0.5rem;">Live Processing Pipeline Stream:</div>
+            <div id="proc-log-entries" style="max-height:220px; overflow-y:auto; background:var(--sl-bg-subtle); padding:0.75rem; border-radius:var(--sl-radius-md); border:1px solid var(--sl-border-light);"></div>
+          </div>
+
+          <div id="proc-results-summary" style="display:none; text-align:center; padding:1rem 0;">
+            <div style="width:52px; height:52px; border-radius:50%; background:#dcfce7; color:#059669; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-size:1.5rem; font-weight:800;">&check;</div>
+            <h3>Dataset Processing Completed</h3>
+            <p style="font-size:0.85rem; color:var(--sl-text-secondary); margin-bottom:1.5rem;">Spatial features ingested, topology repaired, and queued for multi-source conflict checking.</p>
+            <div class="intel-source-box" style="margin-bottom:1.5rem; text-align:left;">
+              <div class="source-row"><span>Features Detected &amp; Extracted:</span> <strong>3,420 polygons</strong></div>
+              <div class="source-row"><span>Coordinate Transformation:</span> <strong>UTM 44N &rarr; WGS84 Validated</strong></div>
+              <div class="source-row"><span>Topology Overlaps Auto-Fixed:</span> <strong>4 gaps snapped</strong></div>
+              <div class="source-row"><span>Quality Confidence Index:</span> <strong style="color:#059669;">94.8%</strong></div>
+            </div>
+            <button class="sl-btn sl-btn-primary" style="width:100%;" onclick="window.SL_DATASETS.closeProcessingModal(); window.SL_NAV.switchOfficerSection('gis');">
+              Inspect on GIS Workspace
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Conflict Multi-Source Comparison & Resolution Modal -->
+    <div id="modal-conflict-comparison" class="sl-modal-backdrop">
+      <div class="sl-modal sl-modal-lg">
+        <div class="sl-modal-header">
+          <div>
+            <h3>Human-in-the-Loop Conflict Resolution</h3>
+            <div style="font-size:0.8rem; color:var(--sl-text-secondary);">Conflict Ref: <strong id="comp-conflict-id">CONF-2026-001</strong> • Parcel: <strong id="comp-parcel-id">TN-MDU-000126</strong></div>
+          </div>
+          <button class="sl-modal-close" onclick="window.SL_CONFLICTS.closeComparisonModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body">
+          <p id="comp-desc" style="font-size:0.875rem; margin-bottom:1.25rem;"></p>
+
+          <!-- 4-Source Comparison Grid -->
+          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.75rem; margin-bottom:1.25rem;">
+            <div class="sl-card" style="padding:0.75rem; background:var(--sl-bg-subtle);">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--sl-text-muted);">CADASTRAL FMB</div>
+              <div id="comp-val-cadastral" style="font-size:1.15rem; font-weight:800; color:var(--sl-navy-900); margin-top:0.25rem;">1,420 sq.m</div>
+              <div style="font-size:0.7rem; color:var(--sl-text-secondary);">Legacy Digitize (1:2000)</div>
+            </div>
+            <div class="sl-card" style="padding:0.75rem; background:var(--sl-bg-subtle);">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--sl-text-muted);">MUNICIPAL GIS</div>
+              <div id="comp-val-municipal" style="font-size:1.15rem; font-weight:800; color:var(--sl-rose-700); margin-top:0.25rem;">1,390 sq.m</div>
+              <div style="font-size:0.7rem; color:var(--sl-text-secondary);">-30 sq.m Discrepancy</div>
+            </div>
+            <div class="sl-card" style="padding:0.75rem; background:#ecfdf5; border-color:#a7f3d0;">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--sl-emerald-700);">GNSS CORS PEGS</div>
+              <div id="comp-val-gnss" style="font-size:1.15rem; font-weight:800; color:var(--sl-emerald-700); margin-top:0.25rem;">1,418.5 sq.m</div>
+              <div style="font-size:0.7rem; color:var(--sl-emerald-700);">&plusmn;0.008m High Precision</div>
+            </div>
+            <div class="sl-card" style="padding:0.75rem; background:var(--sl-bg-subtle);">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--sl-text-muted);">DRONE ORI 2026</div>
+              <div id="comp-val-drone" style="font-size:1.15rem; font-weight:800; color:var(--sl-navy-900); margin-top:0.25rem;">1,419.0 sq.m</div>
+              <div style="font-size:0.7rem; color:var(--sl-text-secondary);">Physical Wall Extent</div>
+            </div>
+          </div>
+
+          <!-- AI Evidence & Recommendation -->
+          <div style="background:var(--sl-blue-50); border:1px solid var(--sl-blue-100); border-radius:var(--sl-radius-md); padding:1rem; margin-bottom:1.25rem;">
+            <div style="font-weight:700; color:var(--sl-blue-800); font-size:0.85rem; margin-bottom:0.25rem;">AI Analytical Recommendation:</div>
+            <div id="comp-ai-rec" style="font-size:0.825rem; color:var(--sl-navy-900); line-height:1.5;"></div>
+            <div id="comp-evidence" style="font-size:0.75rem; color:var(--sl-text-muted); margin-top:0.35rem; font-style:italic;"></div>
+            <div style="font-size:0.725rem; color:var(--sl-amber-700); font-weight:700; margin-top:0.5rem;">
+              &#9888; Note: Official land records are NEVER modified automatically. Authorized officer determination required.
+            </div>
+          </div>
+
+          <!-- Decision Actions -->
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+            <button class="sl-btn sl-btn-success" onclick="window.SL_CONFLICTS.resolveConflict('suggested')">
+              ACCEPT SUGGESTED RESOLUTION (CORS + ORI)
+            </button>
+            <button class="sl-btn sl-btn-outline" onclick="window.SL_CONFLICTS.resolveConflict('cadastral')">
+              USE REVENUE CADASTRAL
+            </button>
+            <button class="sl-btn sl-btn-outline" onclick="window.SL_CONFLICTS.resolveConflict('municipal')">
+              USE MUNICIPAL TAX VALUE
+            </button>
+            <button class="sl-btn sl-btn-outline" onclick="window.SL_CONFLICTS.resolveConflict('gnss')">
+              USE GNSS CORS FIXED
+            </button>
+            <button class="sl-btn sl-btn-outline" onclick="window.SL_CONFLICTS.resolveConflict('manual')">
+              MANUAL RESOLUTION
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Citizen New Request Modal -->
+    <div id="modal-user-new-request" class="sl-modal-backdrop">
+      <div class="sl-modal">
+        <div class="sl-modal-header">
+          <h3>Submit Citizen Land Request</h3>
+          <button class="sl-modal-close" onclick="window.SL_USER.closeNewRequestModal()">&times;</button>
+        </div>
+        <form id="form-user-new-request">
+          <div class="sl-modal-body">
+            <div class="sl-form-group">
+              <label class="sl-label" for="new-req-type">Request Type</label>
+              <select id="new-req-type" class="sl-select" required>
+                <option value="Record Correction">Record Correction (Area / Owner Name Discrepancy)</option>
+                <option value="Boundary Verification">Boundary Verification (Demarcation Pegs)</option>
+                <option value="Land Information Request">Certified Land Information &amp; GIS Map</option>
+                <option value="Survey Request">Joint Total Station / CORS Field Survey</option>
+              </select>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="new-req-parcel">Parcel ID</label>
+              <input type="text" id="new-req-parcel" class="sl-input" value="TN-MDU-000124" required>
+            </div>
+            <div class="sl-form-group">
+              <label class="sl-label" for="new-req-desc">Description of Request / Ground Situation</label>
+              <textarea id="new-req-desc" class="sl-textarea" rows="3" placeholder="Describe boundary dispute or variance with municipal assessment..." required></textarea>
+            </div>
+          </div>
+          <div class="sl-modal-footer">
+            <button type="button" class="sl-btn sl-btn-outline" onclick="window.SL_USER.closeNewRequestModal()">Cancel</button>
+            <button type="submit" class="sl-btn sl-btn-primary">SUBMIT REQUEST</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 7. Live Camera Snapshot Modal -->
+    <div id="modal-camera" class="sl-modal-backdrop">
+      <div class="sl-modal" style="max-width:520px;">
+        <div class="sl-modal-header">
+          <h3>Ground Truth Camera Capture</h3>
+          <button class="sl-modal-close" onclick="window.SL_SURVEYS.closeCameraModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body" style="text-align:center;">
+          <div id="camera-stream-wrapper" style="position:relative; width:100%; height:320px; background:#000; border-radius:var(--sl-radius-md); overflow:hidden;">
+            <video id="camera-live-video" autoplay playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+            <canvas id="camera-canvas" style="display:none;"></canvas>
+          </div>
+
+          <div id="camera-fallback-wrapper" style="display:none; padding:2rem 1rem;">
+            <p style="font-size:0.85rem; color:var(--sl-text-secondary); margin-bottom:1rem;">Browser camera hardware unavailable. Upload on-site field photo directly:</p>
+            <input type="file" id="camera-file-fallback" accept="image/*" class="sl-input">
+          </div>
+        </div>
+        <div class="sl-modal-footer">
+          <button class="sl-btn sl-btn-outline" onclick="window.SL_SURVEYS.closeCameraModal()">Cancel</button>
+          <button id="btn-camera-snap" class="sl-btn sl-btn-primary">Take Snapshot</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Spatial Evidence Modal -->
+    <div id="modal-spatial-evidence" class="sl-modal-backdrop">
+      <div class="sl-modal sl-modal-lg">
+        <div class="sl-modal-header">
+          <h3>AI Spatial Matching Proof &amp; Lineage</h3>
+          <button class="sl-modal-close" onclick="window.SL_AI.closeEvidenceModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body">
+          <p style="font-size:0.875rem; margin-bottom:1rem;">
+            Geometric overlay evidence between <strong>1978 Revenue FMB Digitized Cadastre</strong> and <strong>2026 5cm Drone Orthomosaic (ORI)</strong>.
+          </p>
+          <div style="background:#0f172a; border-radius:var(--sl-radius-md); padding:1.5rem; text-align:center; color:#fff; margin-bottom:1rem;">
+            <!-- Vector diagram representation -->
+            <svg width="100%" height="220" viewBox="0 0 500 220" fill="none">
+              <!-- Cadastral Polygon (Blue dashed) -->
+              <polygon points="120,40 380,30 410,180 100,190" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6,4" fill="rgba(56, 189, 248, 0.15)"/>
+              <!-- Drone Physical Wall (Green solid) -->
+              <polygon points="125,42 376,32 406,177 104,188" stroke="#10b981" stroke-width="3" fill="rgba(16, 185, 129, 0.2)"/>
+              <!-- Centroid Deviation Arrow -->
+              <circle cx="250" cy="110" r="5" fill="#38bdf8"/>
+              <circle cx="253" cy="111" r="5" fill="#10b981"/>
+              <line x1="250" y1="110" x2="253" y2="111" stroke="#dc2626" stroke-width="2"/>
+              <text x="260" y="115" fill="#f8fafc" font-size="12" font-family="sans-serif">Offset: 1.8m (Within Tolerance)</text>
+              <text x="130" y="25" fill="#38bdf8" font-size="11" font-family="sans-serif">&mdash; Cadastral FMB (Blue)</text>
+              <text x="310" y="25" fill="#10b981" font-size="11" font-family="sans-serif">&mdash; Drone ORI Physical Wall (Green)</text>
+            </svg>
+          </div>
+          <div class="intel-source-box">
+            <div class="source-row"><span>Hausdorff Boundary Distance:</span> <strong>0.22 meters</strong></div>
+            <div class="source-row"><span>Intersection-over-Union (IoU):</span> <strong>0.946</strong></div>
+            <div class="source-row"><span>Survey Peg Correlation:</span> <strong style="color:#059669;">4 of 4 CORS Benchmarks Corroborated</strong></div>
+          </div>
+        </div>
+        <div class="sl-modal-footer">
+          <button class="sl-btn sl-btn-primary" onclick="window.SL_AI.closeEvidenceModal()">Close Evidence</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Certified Report Preview & Print Modal -->
+    <div id="modal-report-preview" class="sl-modal-backdrop">
+      <div class="sl-modal sl-modal-lg">
+        <div class="sl-modal-header">
+          <h3>Government Certified Report Preview</h3>
+          <button class="sl-modal-close" onclick="window.SL_REPORTS.closeReportModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body" style="background:#fff;">
+          <div id="report-document-body"></div>
+        </div>
+        <div class="sl-modal-footer">
+          <button id="btn-export-json" class="sl-btn sl-btn-outline sl-btn-sm">Export JSON</button>
+          <button id="btn-export-csv" class="sl-btn sl-btn-outline sl-btn-sm">Export CSV</button>
+          <button id="btn-print-report" class="sl-btn sl-btn-primary sl-btn-sm">Print / Save as PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Manual Topology Coordinate Fix Modal -->
+    <div id="modal-manual-topology" class="sl-modal-backdrop">
+      <div class="sl-modal" style="max-width:480px;">
+        <div class="sl-modal-header">
+          <h3>Manual Topology Vertex Adjustment</h3>
+          <button class="sl-modal-close" onclick="window.SL_AI.closeManualTopologyModal()">&times;</button>
+        </div>
+        <div class="sl-modal-body">
+          <p style="font-size:0.85rem; margin-bottom:1rem;">
+            Adjust boundary node snapping tolerance for issue <strong id="manual-top-id">TOP-01</strong>.
+          </p>
+          <div class="sl-form-group">
+            <label class="sl-label">Snapping Tolerance (meters)</label>
+            <input type="number" class="sl-input" value="0.05" step="0.01">
+          </div>
+          <div class="sl-form-group">
+            <label class="sl-label">Master Reference Geometry</label>
+            <select class="sl-select">
+              <option>Survey of India CORS Geodetic Peg</option>
+              <option>High-Resolution Drone ORI Perimeter Hedge</option>
+              <option>Legacy Revenue FMB Field Baseline</option>
+            </select>
+          </div>
+        </div>
+        <div class="sl-modal-footer">
+          <button class="sl-btn sl-btn-outline" onclick="window.SL_AI.closeManualTopologyModal()">Cancel</button>
+          <button class="sl-btn sl-btn-success" onclick="window.SL_AI.saveManualTopologyFix()">Apply Manual Snapping</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Hub -->
+    <div id="sl-toast-container" class="sl-toast-container"></div>
+
+  </div>
+
+  <!-- Platform Scripts (Strict Modular Sequence) -->
+  <script src="js/demo-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/parcels.js"></script>
+  <script src="js/datasets.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/conflicts.js"></script>
+  <script src="js/changes.js"></script>
+  <script src="js/surveys.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/user.js"></script>
+  <script src="js/officer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

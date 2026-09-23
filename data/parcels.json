@@ -1,0 +1,646 @@
+{
+  "type": "FeatureCollection",
+  "name": "SL_Parcels_Demo",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000124",
+      "properties": {
+        "id": "TN-MDU-000124",
+        "surveyNumber": "S-124/3",
+        "oldSurveyNumber": "124/3A",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1245.0,
+        "cadastralArea": 1200.0,
+        "municipalArea": 1175.0,
+        "gnssArea": 1245.0,
+        "landUse": "Residential",
+        "status": "Officer Verified",
+        "confidence": 94.6,
+        "owner": "R. Sundararaman & S. Meenakshi",
+        "taxAssessmentNo": "TX-2026-8841",
+        "roadAccess": "12m Tar Road (East)",
+        "utilities": ["Water Supply", "UGD Drainage", "TANGEDCO Electric", "Fiber"],
+        "sourceLineage": {
+          "boundary": "Cadastral + GNSS Hybrid",
+          "area": "GNSS CORS Verified",
+          "landUse": "Municipal GIS Tax Register",
+          "building": "Drone ORI 2026 (5cm)",
+          "verification": "Ground Truth GT-2026-009"
+        },
+        "history": [
+          { "date": "2024-02-11", "event": "Legacy Cadastral digitization (1:2000)" },
+          { "date": "2025-08-19", "event": "Municipal Tax Layer integration" },
+          { "date": "2026-01-14", "event": "High-Res Drone ORI Survey (5cm GSD)" },
+          { "date": "2026-02-18", "event": "AI Harmonization & Conflict Detection" },
+          { "date": "2026-03-02", "event": "Field Ground-Truthing Completed (GT-2026-009)" },
+          { "date": "2026-03-05", "event": "Officer Verification Approved by RDO Madurai" }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1182, 9.9248],
+            [78.1192, 9.9249],
+            [78.1191, 9.9241],
+            [78.1181, 9.9240],
+            [78.1182, 9.9248]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000125",
+      "properties": {
+        "id": "TN-MDU-000125",
+        "surveyNumber": "S-124/4",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 980.0,
+        "cadastralArea": 960.0,
+        "municipalArea": 980.0,
+        "gnssArea": 980.0,
+        "landUse": "Commercial",
+        "status": "Verified",
+        "confidence": 92.1,
+        "owner": "V. K. Traders LLP",
+        "taxAssessmentNo": "TX-2026-8842",
+        "roadAccess": "18m Main Arterial Road",
+        "utilities": ["Water Supply", "Commercial Power", "Drainage"],
+        "sourceLineage": {
+          "boundary": "Drone ORI + Cadastral",
+          "area": "Municipal GIS",
+          "landUse": "Municipal Survey",
+          "building": "Drone Footprint Extraction",
+          "verification": "Field Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1193, 9.9249],
+            [78.1202, 9.9250],
+            [78.1201, 9.9242],
+            [78.1192, 9.9241],
+            [78.1193, 9.9249]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000126",
+      "properties": {
+        "id": "TN-MDU-000126",
+        "surveyNumber": "S-124/5",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1420.0,
+        "cadastralArea": 1420.0,
+        "municipalArea": 1390.0,
+        "gnssArea": 1420.0,
+        "landUse": "Residential",
+        "status": "Conflict Detected",
+        "confidence": 78.4,
+        "owner": "P. M. Alagappan",
+        "taxAssessmentNo": "TX-2026-8843",
+        "roadAccess": "9m Cross Street",
+        "utilities": ["TANGEDCO Electric", "Water Supply"],
+        "sourceLineage": {
+          "boundary": "Cadastral Map",
+          "area": "Discrepancy (Cadastral vs Municipal)",
+          "landUse": "Residential",
+          "building": "Drone ORI",
+          "verification": "Pending Officer Review"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1203, 9.9250],
+            [78.1214, 9.9251],
+            [78.1213, 9.9243],
+            [78.1202, 9.9242],
+            [78.1203, 9.9250]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000127",
+      "properties": {
+        "id": "TN-MDU-000127",
+        "surveyNumber": "S-125/1",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1850.0,
+        "cadastralArea": 1850.0,
+        "municipalArea": 1850.0,
+        "gnssArea": 1850.0,
+        "landUse": "Public / Institutional",
+        "status": "Verified",
+        "confidence": 97.2,
+        "owner": "Madurai City Municipal Corporation (Community Center)",
+        "taxAssessmentNo": "TX-EXEMPT-004",
+        "roadAccess": "18m Main Road",
+        "utilities": ["All Municipal Services"],
+        "sourceLineage": {
+          "boundary": "Total Station Ground Survey",
+          "area": "CORS Fixed",
+          "landUse": "Municipal Asset Registry",
+          "building": "As-Built Municipal Record",
+          "verification": "Town Planning Certified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1181, 9.9239],
+            [78.1195, 9.9240],
+            [78.1194, 9.9228],
+            [78.1180, 9.9227],
+            [78.1181, 9.9239]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000128",
+      "properties": {
+        "id": "TN-MDU-000128",
+        "surveyNumber": "S-125/2",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1150.0,
+        "cadastralArea": 1120.0,
+        "municipalArea": 1150.0,
+        "gnssArea": 1150.0,
+        "landUse": "Residential",
+        "status": "Ground Truth Required",
+        "confidence": 81.3,
+        "owner": "K. Balakrishnan",
+        "taxAssessmentNo": "TX-2026-8846",
+        "roadAccess": "9m North Street",
+        "utilities": ["Electric", "Water Supply"],
+        "sourceLineage": {
+          "boundary": "Drone Boundary Extracted",
+          "area": "Unverified Edge",
+          "landUse": "Field Inspection Needed",
+          "building": "New Construction Detected 2026",
+          "verification": "Ground Truthing Assigned"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1196, 9.9240],
+            [78.1205, 9.9241],
+            [78.1204, 9.9229],
+            [78.1195, 9.9228],
+            [78.1196, 9.9240]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000129",
+      "properties": {
+        "id": "TN-MDU-000129",
+        "surveyNumber": "S-125/3",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 890.0,
+        "cadastralArea": 890.0,
+        "municipalArea": 890.0,
+        "gnssArea": 890.0,
+        "landUse": "Residential",
+        "status": "Verified",
+        "confidence": 95.8,
+        "owner": "G. Dhanalakshmi Ammal",
+        "taxAssessmentNo": "TX-2026-8847",
+        "roadAccess": "6m Internal Lane",
+        "utilities": ["Water Supply", "Electric"],
+        "sourceLineage": {
+          "boundary": "Cadastral + Revenue Harmonized",
+          "area": "Revenue Patta Record",
+          "landUse": "Residential",
+          "building": "Roof Footprint Verified",
+          "verification": "Officer Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1206, 9.9241],
+            [78.1215, 9.9242],
+            [78.1214, 9.9232],
+            [78.1205, 9.9230],
+            [78.1206, 9.9241]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000130",
+      "properties": {
+        "id": "TN-MDU-000130",
+        "surveyNumber": "S-126/1",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 2400.0,
+        "cadastralArea": 2400.0,
+        "municipalArea": 2350.0,
+        "gnssArea": 2400.0,
+        "landUse": "Commercial",
+        "status": "Officer Verified",
+        "confidence": 96.5,
+        "owner": "Sri Meenakshi Textiles Warehouse",
+        "taxAssessmentNo": "TX-2026-8848",
+        "roadAccess": "24m Ring Road Connector",
+        "utilities": ["HT Power", "Commercial Water", "UGD"],
+        "sourceLineage": {
+          "boundary": "Survey of India CORS Integrated",
+          "area": "DGPS Field Boundary",
+          "landUse": "Town Planning Commercial Zone",
+          "building": "LiDAR Building Footprint",
+          "verification": "Joint Committee Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1216, 9.9251],
+            [78.1232, 9.9252],
+            [78.1230, 9.9238],
+            [78.1215, 9.9237],
+            [78.1216, 9.9251]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000131",
+      "properties": {
+        "id": "TN-MDU-000131",
+        "surveyNumber": "S-126/2",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 760.0,
+        "cadastralArea": 760.0,
+        "municipalArea": 760.0,
+        "gnssArea": 760.0,
+        "landUse": "Residential",
+        "status": "Verified",
+        "confidence": 93.4,
+        "owner": "J. Mariappan",
+        "taxAssessmentNo": "TX-2026-8850",
+        "roadAccess": "6m Street",
+        "utilities": ["Water", "Drainage", "Electricity"],
+        "sourceLineage": {
+          "boundary": "Cadastral FMB",
+          "area": "Revenue Patta Record",
+          "landUse": "Residential",
+          "building": "Drone Footprint",
+          "verification": "Revenue Inspector Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1215, 9.9236],
+            [78.1224, 9.9236],
+            [78.1223, 9.9228],
+            [78.1214, 9.9228],
+            [78.1215, 9.9236]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000132",
+      "properties": {
+        "id": "TN-MDU-000132",
+        "surveyNumber": "S-126/3",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1100.0,
+        "cadastralArea": 1050.0,
+        "municipalArea": 1100.0,
+        "gnssArea": 1100.0,
+        "landUse": "Residential",
+        "status": "Conflict Detected",
+        "confidence": 76.5,
+        "owner": "N. Senthil Kumar",
+        "taxAssessmentNo": "TX-2026-8851",
+        "roadAccess": "6m Street",
+        "utilities": ["Water", "Electricity"],
+        "sourceLineage": {
+          "boundary": "Overlap with S-126/4",
+          "area": "Discrepancy (50 sq.m)",
+          "landUse": "Residential",
+          "building": "Encroachment Check Needed",
+          "verification": "In Conflict Queue"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1225, 9.9236],
+            [78.1235, 9.9237],
+            [78.1234, 9.9227],
+            [78.1224, 9.9226],
+            [78.1225, 9.9236]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000133",
+      "properties": {
+        "id": "TN-MDU-000133",
+        "surveyNumber": "S-127/1",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 3100.0,
+        "cadastralArea": 3100.0,
+        "municipalArea": 3100.0,
+        "gnssArea": 3100.0,
+        "landUse": "Agricultural / Peri-Urban",
+        "status": "Verified",
+        "confidence": 96.0,
+        "owner": "Chidambaram Pillai Heirs",
+        "taxAssessmentNo": "TX-AGRI-019",
+        "roadAccess": "Cart Track / Agricultural Canal Bund",
+        "utilities": ["Borewell Electricity"],
+        "sourceLineage": {
+          "boundary": "Revenue Cadastral Sheet 4",
+          "area": "Settlement Register Area",
+          "landUse": "Paddy Field / Coconut Grove",
+          "building": "None",
+          "verification": "Survey Dept Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1180, 9.9226],
+            [78.1198, 9.9227],
+            [78.1196, 9.9212],
+            [78.1179, 9.9211],
+            [78.1180, 9.9226]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000134",
+      "properties": {
+        "id": "TN-MDU-000134",
+        "surveyNumber": "S-127/2",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 2900.0,
+        "cadastralArea": 2900.0,
+        "municipalArea": 2900.0,
+        "gnssArea": 2900.0,
+        "landUse": "Public Park & Water Retention",
+        "status": "Verified",
+        "confidence": 98.2,
+        "owner": "Public Works Dept (Water Resources)",
+        "taxAssessmentNo": "TX-EXEMPT-009",
+        "roadAccess": "Bund Road",
+        "utilities": ["Rainwater Catchment", "Sluice Gate"],
+        "sourceLineage": {
+          "boundary": "Water Body Cadastral Delimitation",
+          "area": "Revenue Survey Fixed",
+          "landUse": "Poramboke (Water Course)",
+          "building": "None (Protected Zone)",
+          "verification": "PWD & Revenue Certified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1199, 9.9227],
+            [78.1218, 9.9228],
+            [78.1216, 9.9213],
+            [78.1197, 9.9212],
+            [78.1199, 9.9227]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000135",
+      "properties": {
+        "id": "TN-MDU-000135",
+        "surveyNumber": "S-127/3",
+        "ward": "Ward 12",
+        "village": "Anuppanadi",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1650.0,
+        "cadastralArea": 1650.0,
+        "municipalArea": 1650.0,
+        "gnssArea": 1650.0,
+        "landUse": "Institutional",
+        "status": "Officer Verified",
+        "confidence": 95.1,
+        "owner": "Government Primary Health Centre",
+        "taxAssessmentNo": "TX-EXEMPT-012",
+        "roadAccess": "12m South Cross Road",
+        "utilities": ["Dedicated 3-Phase Power", "RO Water", "UGD"],
+        "sourceLineage": {
+          "boundary": "Municipal Health Cadastre",
+          "area": "TSLR Record",
+          "landUse": "Healthcare / Public",
+          "building": "PHC Ward & Quarters Footprint",
+          "verification": "Collectorate Land Branch Approved"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1219, 9.9228],
+            [78.1234, 9.9229],
+            [78.1232, 9.9215],
+            [78.1217, 9.9214],
+            [78.1219, 9.9228]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000136",
+      "properties": {
+        "id": "TN-MDU-000136",
+        "surveyNumber": "S-128/1",
+        "ward": "Ward 13",
+        "village": "Teppakulam East",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1320.0,
+        "cadastralArea": 1320.0,
+        "municipalArea": 1320.0,
+        "gnssArea": 1320.0,
+        "landUse": "Residential",
+        "status": "Verified",
+        "confidence": 94.0,
+        "owner": "M. Ramanathan & Family",
+        "taxAssessmentNo": "TX-2026-8901",
+        "roadAccess": "10m Avenue",
+        "utilities": ["All Municipal Connections"],
+        "sourceLineage": {
+          "boundary": "Town Survey Land Record (TSLR)",
+          "area": "TSLR Sheet 14",
+          "landUse": "Residential Layout",
+          "building": "Drone ORI Footprint",
+          "verification": "Surveyor Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1170, 9.9248],
+            [78.1181, 9.9248],
+            [78.1180, 9.9238],
+            [78.1169, 9.9238],
+            [78.1170, 9.9248]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000137",
+      "properties": {
+        "id": "TN-MDU-000137",
+        "surveyNumber": "S-128/2",
+        "ward": "Ward 13",
+        "village": "Teppakulam East",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1540.0,
+        "cadastralArea": 1490.0,
+        "municipalArea": 1540.0,
+        "gnssArea": 1540.0,
+        "landUse": "Commercial",
+        "status": "Officer Verified",
+        "confidence": 91.8,
+        "owner": "Madura Super Auto Spares",
+        "taxAssessmentNo": "TX-2026-8902",
+        "roadAccess": "18m Ring Road",
+        "utilities": ["Commercial Power", "Water", "Drainage"],
+        "sourceLineage": {
+          "boundary": "AI Spatial Match + GNSS",
+          "area": "Municipal Tax Record",
+          "landUse": "Automobile Commercial",
+          "building": "Steel Structure Footprint",
+          "verification": "Officer Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1169, 9.9237],
+            [78.1180, 9.9237],
+            [78.1179, 9.9226],
+            [78.1168, 9.9226],
+            [78.1169, 9.9237]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN-MDU-000138",
+      "properties": {
+        "id": "TN-MDU-000138",
+        "surveyNumber": "S-128/3",
+        "ward": "Ward 13",
+        "village": "Teppakulam East",
+        "taluk": "Madurai South",
+        "district": "Madurai",
+        "area": 1780.0,
+        "cadastralArea": 1780.0,
+        "municipalArea": 1780.0,
+        "gnssArea": 1780.0,
+        "landUse": "Residential",
+        "status": "Verified",
+        "confidence": 96.1,
+        "owner": "S. Govindaraj & G. Revathi",
+        "taxAssessmentNo": "TX-2026-8903",
+        "roadAccess": "10m Avenue",
+        "utilities": ["Water Supply", "UGD Drainage", "Electricity"],
+        "sourceLineage": {
+          "boundary": "TSLR Sheet 14 + CORS",
+          "area": "Revenue Patta Verified",
+          "landUse": "Residential",
+          "building": "Independent House (G+1)",
+          "verification": "Officer Verified"
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1168, 9.9225],
+            [78.1179, 9.9225],
+            [78.1178, 9.9212],
+            [78.1167, 9.9212],
+            [78.1168, 9.9225]
+          ]
+        ]
+      }
+    }
+  ]
+}

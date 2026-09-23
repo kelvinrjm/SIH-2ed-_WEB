@@ -1,0 +1,863 @@
+/* ==========================================================================
+   SL: Geospatial Land Intelligence Platform
+   SIH26013 - Urban Land Record Management System
+   Government Enterprise Components Stylesheet
+   ========================================================================== */
+
+/* Government Buttons */
+.sl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-family: var(--sl-font-family);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.55rem 1rem;
+  border-radius: var(--sl-radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 36px;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.sl-btn:hover {
+  text-decoration: none;
+}
+.sl-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sl-btn-primary {
+  background-color: var(--sl-primary);
+  color: #FFFFFF;
+  border-color: #0F456C;
+}
+.sl-btn-primary:hover {
+  background-color: var(--sl-primary-hover);
+  border-color: #0B2942;
+}
+
+.sl-btn-secondary {
+  background-color: var(--sl-secondary);
+  color: #FFFFFF;
+  border-color: #4A5B69;
+}
+.sl-btn-secondary:hover {
+  background-color: #4A5B69;
+}
+
+.sl-btn-outline {
+  background-color: #FFFFFF;
+  color: var(--sl-text-main);
+  border-color: var(--sl-border-dark);
+}
+.sl-btn-outline:hover {
+  background-color: var(--sl-surface-subtle);
+  border-color: var(--sl-text-secondary);
+}
+
+.sl-btn-success {
+  background-color: var(--sl-success);
+  color: #FFFFFF;
+  border-color: #236348;
+}
+.sl-btn-success:hover {
+  background-color: #236348;
+}
+
+.sl-btn-danger {
+  background-color: var(--sl-danger);
+  color: #FFFFFF;
+  border-color: #962E2E;
+}
+.sl-btn-danger:hover {
+  background-color: #962E2E;
+}
+
+.sl-btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.775rem;
+  min-height: 28px;
+}
+
+.sl-btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  min-height: 44px;
+}
+
+.sl-btn-icon-only {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  min-height: 34px;
+}
+
+/* Formal Document Cards */
+.sl-card {
+  background: var(--sl-surface);
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-md);
+  box-shadow: var(--sl-shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.sl-card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--sl-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFFFF;
+  border-top-left-radius: var(--sl-radius-md);
+  border-top-right-radius: var(--sl-radius-md);
+}
+.sl-card-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sl-primary-dark);
+}
+
+.sl-card-body {
+  padding: 1.25rem;
+  flex: 1 1 auto;
+}
+
+.sl-card-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--sl-border);
+  background-color: var(--sl-surface-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  border-bottom-left-radius: var(--sl-radius-md);
+  border-bottom-right-radius: var(--sl-radius-md);
+}
+
+/* ==========================================================================
+   STATISTICS & METRIC CARDS SYSTEM (CRITICAL FOR GOVERNMENT GIS)
+   ========================================================================== */
+
+.stats-grid, .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card, .kpi-card {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-md);
+  padding: 16px 18px;
+  box-shadow: var(--sl-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.stat-card:hover, .kpi-card:hover {
+  border-color: var(--sl-border-medium);
+  box-shadow: var(--sl-shadow-md);
+}
+
+.stat-header, .kpi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.stat-label, .kpi-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--sl-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--sl-radius-sm);
+  background: var(--sl-bg-subtle);
+  color: var(--sl-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-value, .kpi-value {
+  font-family: var(--sl-font-mono);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--sl-text-main);
+  line-height: 1.15;
+  margin: 4px 0;
+  letter-spacing: -0.02em;
+}
+
+.stat-description, .stat-sub, .kpi-sub {
+  font-size: 0.775rem;
+  color: var(--sl-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Status variants for Stat Cards */
+.stat-card.stat-warning, .kpi-card.kpi-warning {
+  border-left: 4px solid var(--sl-warning);
+}
+.stat-card.stat-warning .stat-value, .kpi-card.kpi-warning .kpi-value {
+  color: #A0680A;
+}
+
+.stat-card.stat-danger, .kpi-card.kpi-danger {
+  border-left: 4px solid var(--sl-danger);
+}
+.stat-card.stat-danger .stat-value, .kpi-card.kpi-danger .kpi-value {
+  color: var(--sl-danger);
+}
+
+.stat-card.stat-success, .kpi-card.kpi-success {
+  border-left: 4px solid var(--sl-success);
+}
+.stat-card.stat-success .stat-value, .kpi-card.kpi-success .kpi-value {
+  color: var(--sl-success);
+}
+
+.stat-card.stat-primary, .kpi-card.kpi-primary {
+  border-left: 4px solid var(--sl-primary);
+}
+
+/* ==========================================================================
+   DATA QUALITY & HARMONIZATION PROGRESS METRIC CARD
+   ========================================================================== */
+
+.data-quality-box {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-md);
+  padding: 16px 20px;
+  box-shadow: var(--sl-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quality-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quality-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.775rem;
+}
+
+.quality-progress-label {
+  color: var(--sl-text-secondary);
+  font-weight: 600;
+}
+
+.quality-progress-pct {
+  font-family: var(--sl-font-mono);
+  font-weight: 700;
+  color: var(--sl-text-main);
+}
+
+.sl-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #E5ECF0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sl-progress-fill {
+  height: 100%;
+  background: var(--sl-primary);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.sl-progress-fill.fill-success { background: var(--sl-success); }
+.sl-progress-fill.fill-warning { background: var(--sl-warning); }
+
+/* ==========================================================================
+   CHART CONTAINERS
+   ========================================================================== */
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.chart-card {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--sl-shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  margin-bottom: 12px;
+}
+.chart-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sl-primary-dark);
+  margin-bottom: 2px;
+}
+.chart-header p {
+  font-size: 0.775rem;
+  color: var(--sl-text-secondary);
+}
+
+.chart-canvas-wrapper {
+  position: relative;
+  height: 250px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   PENDING ACTIONS & WORK QUEUE
+   ========================================================================== */
+
+.pending-actions-section {
+  margin-bottom: 20px;
+}
+
+.pending-actions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.pending-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--sl-border-light);
+  gap: 12px;
+  transition: background-color 0.12s;
+}
+.pending-action-item:last-child {
+  border-bottom: none;
+}
+.pending-action-item:hover {
+  background-color: var(--sl-surface-subtle);
+}
+
+.pending-action-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pending-action-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pending-action-bullet.bullet-critical { background: var(--sl-danger); }
+.pending-action-bullet.bullet-high { background: var(--sl-warning); }
+.pending-action-bullet.bullet-medium { background: var(--sl-primary); }
+.pending-action-bullet.bullet-low { background: var(--sl-secondary); }
+
+.pending-action-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sl-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pending-action-sub {
+  font-size: 0.75rem;
+  color: var(--sl-text-secondary);
+  margin-top: 1px;
+}
+
+/* ==========================================================================
+   RECENT ACTIVITY & DATA SOURCES SUMMARY
+   ========================================================================== */
+
+.dashboard-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.activity-timeline {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.activity-item {
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  position: relative;
+}
+.activity-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 56px;
+  top: 26px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--sl-border-light);
+}
+
+.activity-time {
+  font-family: var(--sl-font-mono);
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--sl-text-muted);
+  width: 46px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.activity-node {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sl-primary);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 1.5px var(--sl-primary);
+  margin-top: 4px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.activity-content {
+  flex: 1;
+}
+.activity-title {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--sl-text-main);
+}
+.activity-desc {
+  font-size: 0.75rem;
+  color: var(--sl-text-secondary);
+  margin-top: 2px;
+}
+
+/* Data Sources Inventory */
+.data-sources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.data-source-card {
+  background: var(--sl-surface-subtle);
+  border: 1px solid var(--sl-border-light);
+  border-radius: var(--sl-radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.data-source-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--sl-primary-dark);
+}
+.data-source-count {
+  font-size: 0.725rem;
+  color: var(--sl-text-secondary);
+  margin-top: 1px;
+}
+
+/* ==========================================================================
+   DIGITAL PATTA / RECORD CONTAINER
+   ========================================================================== */
+
+.gov-patta-doc {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border-dark);
+  border-top: 5px solid var(--sl-primary);
+  border-radius: var(--sl-radius-sm);
+  padding: 2rem;
+  box-shadow: var(--sl-shadow-md);
+  position: relative;
+}
+.gov-patta-header {
+  border-bottom: 2px solid var(--sl-primary);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.gov-patta-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--sl-primary-dark);
+}
+.gov-patta-sub {
+  font-size: 0.8rem;
+  color: var(--sl-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.gov-stamp-badge {
+  border: 2px solid var(--sl-success);
+  color: var(--sl-success);
+  padding: 0.35rem 0.85rem;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+}
+
+/* Official Record Field Grid */
+.record-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.record-field {
+  display: flex;
+  flex-direction: column;
+}
+.record-field .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sl-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.02em;
+}
+.record-field .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--sl-text-main);
+}
+.record-field .value-mono {
+  font-family: var(--sl-font-mono);
+}
+
+/* Government Administrative Status Badges */
+.sl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--sl-radius-xs);
+  line-height: 1.2;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.sl-badge-verified, .sl-badge-success {
+  background: var(--sl-success-bg);
+  color: var(--sl-success);
+  border-color: var(--sl-success-border);
+}
+
+.sl-badge-conflict, .sl-badge-danger {
+  background: var(--sl-danger-bg);
+  color: var(--sl-danger);
+  border-color: var(--sl-danger-border);
+}
+
+.sl-badge-warning, .sl-badge-review {
+  background: var(--sl-warning-bg);
+  color: #A0680A;
+  border-color: var(--sl-warning-border);
+}
+
+.sl-badge-info {
+  background: var(--sl-info-bg);
+  color: var(--sl-info);
+  border-color: var(--sl-info-border);
+}
+
+.sl-badge-neutral {
+  background: var(--sl-surface-subtle);
+  color: var(--sl-text-secondary);
+  border-color: var(--sl-border);
+}
+
+/* Priority Indicators */
+.priority-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+}
+.priority-critical { background: var(--sl-danger); }
+.priority-high { background: var(--sl-warning); }
+.priority-medium { background: var(--sl-info); }
+.priority-low { background: var(--sl-secondary); }
+
+/* Administrative Data Tables */
+.sl-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-sm);
+  background: #FFFFFF;
+}
+
+.sl-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+.sl-table th {
+  background-color: var(--sl-surface-subtle);
+  color: var(--sl-primary-dark);
+  font-weight: 700;
+  padding: 0.65rem 0.95rem;
+  border-bottom: 1px solid var(--sl-border-dark);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.sl-table td {
+  padding: 0.75rem 0.95rem;
+  border-bottom: 1px solid var(--sl-border-light);
+  color: var(--sl-text-main);
+  vertical-align: middle;
+}
+.sl-table tr:hover td {
+  background-color: #F8FAFC;
+}
+
+/* Forms & Inputs */
+.sl-form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.sl-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--sl-primary-dark);
+}
+
+.sl-input, .sl-select, .sl-textarea {
+  width: 100%;
+  font-family: var(--sl-font-family);
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sl-border-dark);
+  border-radius: var(--sl-radius-sm);
+  background-color: #FFFFFF;
+  color: var(--sl-text-main);
+  min-height: 38px;
+  transition: border-color 0.15s;
+}
+.sl-input:focus, .sl-select:focus, .sl-textarea:focus {
+  border-color: var(--sl-primary);
+  outline: none;
+}
+
+.sl-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  cursor: pointer;
+}
+
+/* Modals */
+.sl-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(11, 41, 66, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+}
+.sl-modal-backdrop.active {
+  display: flex;
+}
+
+.sl-modal {
+  background: #FFFFFF;
+  border-radius: var(--sl-radius-md);
+  border: 1px solid var(--sl-border-dark);
+  box-shadow: var(--sl-shadow-xl);
+  max-width: 620px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sl-modal.sl-modal-lg {
+  max-width: 880px;
+}
+
+.sl-modal-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--sl-border);
+  background: var(--sl-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sl-modal-header h3 {
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.sl-modal-close {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.35rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  line-height: 1;
+}
+
+.sl-modal-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.sl-modal-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--sl-border);
+  background: var(--sl-surface-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Timeline */
+.doc-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1.25rem 0;
+  position: relative;
+  padding: 0 1rem;
+}
+.doc-timeline::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 2rem;
+  right: 2rem;
+  height: 2px;
+  background: var(--sl-border-dark);
+  z-index: 1;
+}
+.doc-timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.doc-timeline-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid var(--sl-border-dark);
+  color: var(--sl-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.doc-timeline-step.completed .doc-timeline-circle {
+  background: var(--sl-success);
+  border-color: var(--sl-success);
+  color: #FFFFFF;
+}
+.doc-timeline-step.active .doc-timeline-circle {
+  background: var(--sl-primary);
+  border-color: var(--sl-primary);
+  color: #FFFFFF;
+}
+.doc-timeline-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sl-text-main);
+}
+.doc-timeline-date {
+  font-size: 0.7rem;
+  color: var(--sl-text-muted);
+}
+
+/* Toast Notifications */
+.sl-toast-container {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 11000;
+  max-width: 360px;
+  width: calc(100% - 2.5rem);
+}
+.sl-toast {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border-dark);
+  border-left: 4px solid var(--sl-primary);
+  border-radius: var(--sl-radius-xs);
+  box-shadow: var(--sl-shadow-md);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+.sl-toast.toast-success { border-left-color: var(--sl-success); }
+.sl-toast.toast-warning { border-left-color: var(--sl-warning); }
+.sl-toast.toast-error { border-left-color: var(--sl-danger); }
+.sl-toast-title { font-weight: 700; font-size: 0.8rem; color: var(--sl-primary-dark); }
+.sl-toast-msg { font-size: 0.775rem; color: var(--sl-text-secondary); margin-top: 0.1rem; }

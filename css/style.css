@@ -1,0 +1,415 @@
+/* ==========================================================================
+   SL: Geospatial Land Intelligence Platform
+   SIH26013 - Urban Land Record Management System
+   Government Enterprise Design System & Core Stylesheet
+   ========================================================================== */
+
+:root {
+  /* Government / Geospatial Enterprise Palette */
+  --sl-navy-900: #0B2942;        /* Primary Deep Navy */
+  --sl-navy-800: #123B5D;        /* Secondary Dark Blue */
+  --sl-navy-700: #163D5A;        /* Sidebar Accent */
+  
+  --sl-primary: #155A8A;         /* Official Government Blue */
+  --sl-primary-dark: #0B2942;    /* Deep Navy */
+  --sl-primary-light: #2F6F9F;   /* Secondary Blue */
+  --sl-primary-hover: #0F456C;
+  
+  --sl-secondary: #5E7180;       /* Muted Blue-Gray Slate */
+  --sl-secondary-light: #8295A5;
+  
+  /* Neutral Surfaces */
+  --sl-bg: #F4F7F9;              /* Neutral government platform background */
+  --sl-bg-main: #F4F7F9;
+  --sl-bg-subtle: #EDF2F7;
+  --sl-surface: #FFFFFF;         /* Crisp white sheet */
+  --sl-surface-subtle: #F8FAFC;  /* Light gray section */
+  --sl-surface-hover: #EEF2F6;
+  
+  /* Structural Borders */
+  --sl-border: #D7E0E7;          /* Standard government border */
+  --sl-border-light: #E5ECF0;
+  --sl-border-medium: #CBD5E1;
+  --sl-border-dark: #B5C4D2;
+  --sl-border-focus: #155A8A;
+  
+  /* Text & Labels */
+  --sl-text-main: #172B3A;       /* High-contrast readability */
+  --sl-text-secondary: #5E7180;  /* Secondary metadata */
+  --sl-text-muted: #7A8E9E;      /* Muted tags and labels */
+  --sl-text-inverse: #FFFFFF;
+  
+  /* Standard Government Semantic Status */
+  --sl-success: #2E7D5B;         /* Verified / Validated Green */
+  --sl-success-bg: #EDF7F2;
+  --sl-success-border: #B7E4CF;
+  
+  --sl-warning: #C58A1B;         /* Review / Discrepancy Amber */
+  --sl-warning-bg: #FEF9EE;
+  --sl-warning-border: #FBE2AD;
+  
+  --sl-danger: #B83A3A;          /* Conflict / Error Red */
+  --sl-danger-bg: #FDF2F2;
+  --sl-danger-border: #F8C8C8;
+  
+  --sl-info: #155A8A;
+  --sl-info-bg: #EEF6FC;
+  --sl-info-border: #C2DFEF;
+
+  /* Standard Dimensions */
+  --sl-radius-xs: 3px;
+  --sl-radius-sm: 6px;
+  --sl-radius-md: 8px;
+  --sl-radius-lg: 10px;
+  
+  --sl-topbar-height: 34px;
+  --sl-header-height: 60px;
+  --sl-sidebar-width: 240px;
+  --sl-mobile-nav-height: 58px;
+  
+  /* Typography */
+  --sl-font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --sl-font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  
+  /* Structured, Subtle Enterprise Shadows */
+  --sl-shadow-xs: 0 1px 2px rgba(11, 41, 66, 0.04);
+  --sl-shadow-sm: 0 1px 3px rgba(11, 41, 66, 0.06);
+  --sl-shadow-md: 0 2px 6px rgba(11, 41, 66, 0.08);
+  --sl-shadow-lg: 0 4px 16px rgba(11, 41, 66, 0.12);
+  --sl-shadow-xl: 0 10px 25px rgba(11, 41, 66, 0.15);
+}
+
+/* Reset & Box-Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--sl-font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--sl-text-main);
+  background-color: var(--sl-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accessible Focus */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--sl-primary);
+  outline-offset: 1px;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--sl-primary-dark);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 { font-size: 1.75rem; letter-spacing: -0.02em; }
+h2 { font-size: 1.35rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+h4 { font-size: 0.95rem; font-weight: 600; }
+h5 { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+
+p {
+  color: var(--sl-text-secondary);
+}
+
+a {
+  color: var(--sl-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Application Container */
+#app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Screen Switching */
+.sl-screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+}
+.sl-screen.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Official Government Top Bar */
+.gov-top-bar {
+  background: #082035;
+  color: #D9E2EC;
+  font-size: 0.75rem;
+  padding: 0.35rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #123B5D;
+  z-index: 1000;
+}
+.gov-emblem-text {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.gov-tag {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--sl-radius-xs);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.sih-badge {
+  display: inline-block;
+  background: #E1F5FE;
+  color: #0277BD;
+  border: 1px solid #B3E5FC;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--sl-radius-xs);
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* Splash Screen */
+#screen-splash {
+  background: #0B2942;
+  color: #FFFFFF;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+#screen-splash.active {
+  display: flex;
+}
+
+.splash-box {
+  max-width: 500px;
+  background: #FFFFFF;
+  color: var(--sl-text-main);
+  padding: 2.5rem 2rem;
+  border-radius: var(--sl-radius-md);
+  border: 1px solid var(--sl-border);
+  box-shadow: var(--sl-shadow-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.splash-logo {
+  height: 56px;
+  margin-bottom: 1.25rem;
+}
+.splash-title {
+  font-size: 1.75rem;
+  color: var(--sl-primary-dark);
+  margin-bottom: 0.25rem;
+  font-weight: 800;
+}
+.splash-subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--sl-primary);
+  margin-bottom: 0.35rem;
+}
+.splash-tagline {
+  font-size: 0.825rem;
+  color: var(--sl-text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.45;
+}
+.splash-bar {
+  width: 220px;
+  height: 4px;
+  background: #E2E8F0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.splash-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--sl-primary);
+  animation: splashLoad 1.5s ease-in-out infinite;
+}
+@keyframes splashLoad {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Portal Entry Welcome Screen */
+#screen-welcome, #screen-portal-select {
+  background: #F4F7F9;
+  background-image: 
+    linear-gradient(to right, rgba(11, 41, 66, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 41, 66, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  min-height: 100vh;
+}
+
+.portal-entry-header {
+  background: #FFFFFF;
+  border-bottom: 2px solid var(--sl-primary);
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--sl-shadow-sm);
+}
+
+.portal-entry-hero {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.portal-entry-title {
+  margin-bottom: 0.75rem;
+  color: var(--sl-primary-dark);
+  font-size: 1.85rem;
+}
+.portal-entry-desc {
+  font-size: 0.95rem;
+  color: var(--sl-text-secondary);
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.55;
+}
+
+/* Two Clear Door Choices */
+.portal-doors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  text-align: left;
+}
+
+.portal-door-card {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border);
+  border-top: 4px solid var(--sl-primary);
+  border-radius: var(--sl-radius-md);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sl-shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.portal-door-card:hover {
+  border-color: var(--sl-primary);
+  box-shadow: var(--sl-shadow-md);
+}
+.portal-door-card.user-card {
+  border-top-color: var(--sl-primary-light);
+}
+.portal-door-card.officer-card {
+  border-top-color: var(--sl-navy-900);
+}
+
+.door-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--sl-primary-dark);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.door-desc {
+  font-size: 0.875rem;
+  color: var(--sl-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.door-features-list {
+  list-style: none;
+  margin-bottom: 1.75rem;
+  font-size: 0.825rem;
+  color: var(--sl-text-secondary);
+}
+.door-features-list li {
+  padding: 0.35rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.door-features-list li::before {
+  content: '✓';
+  color: var(--sl-success);
+  font-weight: 800;
+}
+
+/* Feature Pillars Grid */
+.welcome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+.feature-box {
+  background: #FFFFFF;
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-sm);
+  padding: 1.25rem;
+  text-align: left;
+  box-shadow: var(--sl-shadow-xs);
+}
+.feature-box-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--sl-radius-sm);
+  background: var(--sl-info-bg);
+  color: var(--sl-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+.feature-box h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+.feature-box p {
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+/* Offline Alert Strip */
+.offline-status-bar {
+  background: #FFF8E1;
+  border-bottom: 1px solid #FFE082;
+  color: #8D5B00;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 1.5rem;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+}
+.offline-status-bar.active {
+  display: flex;
+}
