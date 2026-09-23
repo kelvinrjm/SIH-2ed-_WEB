@@ -5,12 +5,30 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT || 4173);
-const envPath = path.join(root, '.env');
-const envText = await fs.readFile(envPath, 'utf8');
-const apiKey = envText.match(/^\s*(?:const\s+)?API_KEY\s*=\s*["']?([^\r\n"';]+)/m)?.[1]?.trim();
 
+// Render and other hosting providers expose secrets through environment variables.
+// Keep local .env support optional so the server can still start when no .env file
+// is present in production.
+async function loadApiKey() {
+  if (process.env.API_KEY?.trim()) {
+    return process.env.API_KEY.trim();
+  }
+
+  try {
+    const envPath = path.join(root, '.env');
+    const envText = await fs.readFile(envPath, 'utf8');
+    return envText.match(/^\s*(?:const\s+)?API_KEY\s*=\s*["']?([^\r\n"';]+)/m)?.[1]?.trim() || '';
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.warn('Could not read local .env file:', error.message);
+    }
+    return '';
+  }
+}
+
+const apiKey = await loadApiKey();
 if (!apiKey) {
-  throw new Error('API_KEY is missing from .env');
+  console.warn('API_KEY is not configured. Translation requests will return an error until API_KEY is added to the hosting environment.');
 }
 
 const mimeTypes = {
@@ -31,6 +49,11 @@ function sendJson(response, status, body) {
 }
 
 async function translate(request, response) {
+  if (!apiKey) {
+    sendJson(response, 503, { error: 'Translation service is not configured' });
+    return;
+  }
+
   let body = '';
   for await (const chunk of request) body += chunk;
 
